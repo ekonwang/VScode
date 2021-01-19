@@ -1,0 +1,13 @@
+A.
+%rdi, %esi, %rax, %rdx
+B.
+0, 1
+C.
+mask非零
+D.
+通过指令 salq   %cl, %rdx  使得存放在 %rdx 中的 mask 被算术左移x位（当x大于64时，实际左移x % 64 位）
+E.
+通过指令 orq    %rdx，%rax  使得存放在 %rax 中的 result 发生改变，变为 result|(x&mask)
+F.
+0              ;  1                ; != 0              ;
+<<n            ;  (x & mask)       ;  

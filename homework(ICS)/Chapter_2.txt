@@ -1,0 +1,6 @@
+2.74
+int tsub_ok( int x, int y ){
+    int z = ~ ( ~(unsigned)0 >> 1 ) ;
+    return ( !(y == z) && tadd_ok( x, -y ) )||( y == z && !tadd_ok( x,  -y ));
+}
+

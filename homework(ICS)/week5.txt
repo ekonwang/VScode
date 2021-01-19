@@ -1,0 +1,22 @@
+2.79
+int mul3div4( int x ){
+    return ( ( x << 1 ) + x ) >> 2;
+}
+
+int threefourths( int x ){
+    int mask = ~ ( ( x >> 31 ) << 2 ) ;
+    int64_t y = ( ( ( int64_t ) x << 1 ) + x ) >> 2 ;
+    int result = ( int ) y ; 
+    return result;
+}
+
+2.82
+A. 当x == Tmin 时等式为零；
+B. 17*y+15x=16(x+y)+y-x=(x+y)<<4+y-x;
+c.x为 Tmin时候将导致错误
+D.无论无符号还是有符号，位操作都相同
+E.先右移不存在溢出,然后再左移回来可知道只可能由于低二位的丢失造成数值变小，故小于等于原值
+
+2.83
+A. Y/( 2^k - 1 )
+B. (a) 5/7 (b) 0.4 (c) 19/63

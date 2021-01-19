@@ -1,0 +1,20 @@
+4 Shanghai
+Shanghai        Wuhan           12/31/2020      23:31       1/1/2021            2:14            200
+Shanghai        Wuhan           12/15/2020      3:32        12/15/2020          13:21           342
+Shanghai        Shenzhen        1/2/2021        9:21        1/2/2021            14:56           290
+Shanghai        Shenzhen        3/2/2021        3:32        3/2/2021            8:59            876             
+7 Wuhan
+Wuhan           Shenzhen        1/1/2021        3:45        1/1/2021            6:45            100
+Wuhan           Shenzhen        1/3/2021        9:32        1/3/2021            18:01           342
+Wuhan           Shenzhen        1/9/2021        14:13       1/9/2021            21:54           143
+Wuhan           Shanghai        1/2/2021        6:23        1/2/2021            13:31           621
+Wuhan           Shanghai        1/3/2021        9:54        1/3/2021            17:10           2345
+Wuhan           Shanghai        1/2/2021        23:34       1/3/2021            7:12            569
+Wuhan           Shanghai        12/30/2020      3:59        1/1/2021            0:27            799
+5 Shenzhen
+Shenzhen        Shanghai        1/1/2021        5:45        1/1/2021            16:45           920     
+Shenzhen        Shanghai        1/2/2021        9:21        1/2/2021            14:56           290
+Shenzhen        Wuhan           1/1/2021        3:45        1/1/2021            6:45            100 
+Shenzhen        Wuhan           1/3/2021        9:32        1/3/2021            18:01           342
+Shenzhen        Wuhan           1/9/2021        14:13       1/9/2021            21:54           143
+-1
