@@ -5,10 +5,8 @@ typedef unsigned long long ull;
 typedef long long ll;
 
 #define N 1001
-#define Maxm 1000001
-#define MaxRe 1000000000
 
-int sol(){
+void sol(){
     
 }
 
