@@ -4,19 +4,23 @@ using namespace std;
 typedef unsigned long long ull;
 typedef long long ll;
 
-#define N 1001
-#define Maxm 1000001
-#define MaxRe 1000000000
+#define N 32
+int a[N][N] = {0};
+
 
 int sol(){
     
 }
 
+
 int main() {
     ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    sol();
+    int t;
+    cin >> t;
+    for(int i = 0; i < t; i++){
+        cout << "Case #" << i + 1 << ":" << endl;
+        sol();
+    }
     system("pause");
     return 0;
 }
