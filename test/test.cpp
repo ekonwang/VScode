@@ -1,24 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int T,n,m,x,f[10100],a[10010],sg[100010];
-bool vis[100010];
+typedef unsigned long long ull;
+typedef long long ll;
 
-int main()
-{
-	for (int i=1; i<=10001; i++) f[i]=i;
-	scanf("%d",&T);
-	while (T--)
-	{
-		scanf("%d",&n);
-		int ans=0;
-		for (int i=1; i<=n; i++)
-		{
-			scanf("%d",&a[i]);
-			ans^=a[i];
+#define N 10010
+
+void sol(){
+    int t, h, val, res;
+	cin >> t;
+	for(int i = 0; i < t; i++){
+		cin >> h;
+		res = 0;
+		for(int j = 0; j < h; j++) {
+			cin >> val;
+			res ^= val;
 		}
-		if (ans) printf("Yes\n");
-		else printf("No\n"); 
+		if(res) cout << "Yes" << endl;
+		else cout << "No" << endl;
 	}
-	return 0;
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+    sol();
+    return 0;
 }

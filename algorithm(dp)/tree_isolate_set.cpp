@@ -6,6 +6,8 @@ typedef long long ll;
 
 #define N 1001
 
+
+
 void sol(){
     
 }

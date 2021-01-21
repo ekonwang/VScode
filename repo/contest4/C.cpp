@@ -1,20 +1,26 @@
-#include <bits/stdc++.h>
+#include <cstring>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-typedef unsigned long long ull;
-typedef long long ll;
+int out[20][1 << 19];
 
-#define N 1001
-#define Maxm 1000001
-#define MaxRe 1000000000
+int main()
+{
+    out[0][0] = 1;
+    for (int i = 1; i < 16; i++)
+    {
+        for (int j = 0; j < (1 << (i - 1)); j++)
+        {
+            out[i][j * 2] = i + 1;
+            out[i][j * 2 + 1] = out[i - 1][j];
+        }
+    }
+    int n;
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++)
+        printf("%d%c", out[15][i], (i == n - 1) ? '\n' : ' ');
 
-int sol(){
-    
-}
-
-int main() {
-    ios::sync_with_stdio(0);
-    sol();
-    system("pause");
     return 0;
 }
