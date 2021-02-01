@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define For(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)
 
 typedef unsigned long long ull;
 typedef long long ll;
@@ -7,7 +8,9 @@ typedef long long ll;
 #define N 1001
 
 void sol(){
-    cout << "hello" << endl;
+    int m, n, cnt[102][102] = {0};
+    cin >> n >> m;
+    for()
 }
 
 int main() {
