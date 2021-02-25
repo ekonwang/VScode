@@ -25,20 +25,30 @@ il bool read(T& x, Args&...args) { bool res = 1; res &= read(x); res &= read(arg
 const double EPS = 1e-6;
 const int M = 1000000007, INF = 0x3f3f3f3f;
 const LL INFLL = 0x3f3f3f3f3f3f3f3fLL;
-const int N = 1000010;
+const int N = 3010;
 
-int n, k, a[8];
-
-il bool init() {
-    read(k); if (k == 0)return 0;
-    memset(a, 0, sizeof a);
-    n = 0;
-    For(i, 1, k) read(a[i]), n += a[i];
-    return 1;
-}
+int n, res = 0, a[N] = {0}, b[N] = {0}, dp[N][N] = {0};
 
 il void solve() {
-    
+    int n;
+    cin >> n;
+    For(i, 1, n) cin >> a[i];
+    For(i, 1, n) cin >> b[i]; 
+    for(int i = 1; i <= n; i++){
+        int tmp = 0;
+        // for(int j = 1; j <= n; j++){
+        //     if(a[i] > b[j-1]) tmp = max(tmp, dp[i-1][j-1]);
+        //     if(a[i] == b[j]) dp[i][j] = tmp + 1;
+        //     else dp[i][j] = dp[i-1][j];
+        // }
+        for(int j = 1; j <= n; j++){
+            dp[i][j] = a[i] == b[j] ? tmp + 1: dp[i-1][j];
+            tmp = a[i] > b[j] ? max(dp[i-1][j], tmp) : tmp;
+            //稍微调整一下tmp更新的顺序就可以达到理想的效果
+        }
+    }
+    for(int i = 1; i <= n; i++) res = max(res, dp[n][i]);
+    cout << res << endl;
 }
 
 int main() {

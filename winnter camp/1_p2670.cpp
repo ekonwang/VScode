@@ -10,7 +10,6 @@ typedef long long ll;
 void sol(){
     int m, n, cnt[102][102] = {0};
     cin >> n >> m;
-    for()
 }
 
 int main() {
