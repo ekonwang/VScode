@@ -32,9 +32,32 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
 
 const int N = 1000010;
 /////////////////////////////////////////////////////////////////////////////////////////
-
+// when a == 0 or 1, c can only be 0.
+// when a >= 2, 0 <= c <= b.
 il void solve() {
-    
+    int a, b, k;
+    cin >> a >> b >> k;
+    if(!a || b == 1) 
+        if(!k) {
+            cout << "Yes" << endl; 
+            For(i, 1, 2) {For(i, 1, b) cout << 1; For(i, 1, a) cout << 0; cout << endl;}
+        }
+        else cout << "No" << endl;
+    else{
+        if(k <= a){
+            cout << "Yes" << endl;
+            For(i, 1, b) cout << 1; For(i, 1, a) cout << 0; cout << endl;
+            For(i, 1, b-1) cout << 1; For(i, 1, k) cout << 0; cout << 1; For(i, 1, a-k) cout << 0; cout << endl; 
+        }else if(k <= a + b - 2){
+            cout << "Yes" << endl;
+            For(i, 1, b) cout << 1; For(i, 1, a) cout << 0; cout << endl;
+            if(k <= b-1){
+                For(i, 1, b-k) cout << 1; cout << 0; For(i, 1, k) cout << 1; For(i, 1, a-1) cout << 0; cout << endl;
+            }else{
+                cout << 1; cout << 0; For(i, 1, b-2) cout << 1; For(i, 1, k+1-b) cout << 0; cout << 1; For(i, 1, a+b-2-k) cout << 0; cout << endl;
+            }
+        }else cout << "No" << endl;
+    }
 }
 
 int main() {
