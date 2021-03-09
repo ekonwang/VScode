@@ -32,7 +32,9 @@ template<class S, class T> istream& operator >> (istream& in, pair<S, T>& p) {
 }
 
 const int N = 1000010;
-
+// The algorithm based on a very concise conclusion : 
+// u can convert to v if and only if : 1) u's significant bits more than v; 2) v's every bits is no lower than
+// the corresponding bit in u; 3) v bigger than u; 
 il void solve(){
     
 }
