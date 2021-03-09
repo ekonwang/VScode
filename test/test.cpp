@@ -1,58 +1,69 @@
-#include <cstdio>
-#include <algorithm>
+#include <iostream>
+#include <ctime>
+/* 
+* 
+* test program.
+* writer : floyd wang.
+* 
+*/
+
 using namespace std;
+const int N = 50000;
 
-const int n = 200, N = n + 3;
+void quick_sort(int a[], int left, int right){
+    /* 
+    * quick sort, estimated complexity at O(nlogn)
+    */
+    if(left >= right) return ;
+    int l = left-1, r = right, k = a[right];
+    while(l <= r) {
+        while(a[++l] < k) {}
+        while(r > left && a[--r] >= k) {}
+        if(l >= r) break;
+        int tmp = a[l];
+        a[l] = a[r];
+        a[r] = tmp;
+    }
+    a[right] = a[l];
+    a[l] = k;
+    quick_sort(a, left, l-1);
+    quick_sort(a, l+1, right);
+}
 
-double f[N][N][N][2][2];
+void bubble_sort(int a[], int left, int right){
+    /* 
+    * bubble sort, estimated complexity at O(n2)
+    */
+    if(right <= left) return;
+    for(int i = left; i <= right; ++i) 
+        for(int j = right - 1; j >= i; --j) 
+            if (a[j+1] < a[j]) {
+                int tmp = a[j+1];
+                a[j+1] = a[j];
+                a[j] = tmp;
+            }
+}
 
 int main() {
-  f[1][1][1][0][1] = f[1][1][1][0][0] = f[1][1][1][1][0] = 1;
-  for (int i = 1; i < n; ++i)
-    for (int j = 1; j <= n; ++j)
-        for (int k = 0; k <= n; ++k)
-          for (int p = 0; p < 2; ++p)
-            for (int q = 0; q < 2; ++q) {
-              if (f[i][j][k][p][q] == 0)
-                continue;
-              if (k == 1 && p == 1 && q == 1)
-                continue;
-              int nk = k - 1;
-              if (p == 0) {
-                if (k > 0) {
-                  f[i + 1][j][k    ][1][q] += f[i][j][k][p][q];
-                  f[i + 1][j][k    ][0][q] += f[i][j][k][p][q];
-                }
-                f[i + 1][max(j, k + 1)][k + 1][1][q] += f[i][j][k][p][q];
-                f[i + 1][max(j, k + 1)][k + 1][0][q] += f[i][j][k][p][q];
-              }
-              if (q == 0) {
-                if (k > 0) {
-                  f[i + 1][j][k    ][p][1] += f[i][j][k][p][q];
-                  f[i + 1][j][k    ][p][0] += f[i][j][k][p][q];
-                }
-                f[i + 1][max(j, k + 1)][k + 1][p][1] += f[i][j][k][p][q];
-                f[i + 1][max(j, k + 1)][k + 1][p][0] += f[i][j][k][p][q];
-              }
-              if (i == 0)
-                nk = 1;
-              // printf("%d %d %d %d: %f, nk = %d\n", i, k, p, q, f[i][k][p][q], nk);
+    /* 
+    *   
+    * main function.
+    *  
+    */
+    clock_t startT, endT;
+    srand(time(0));
 
-              if (k > 1)
-                f[i + 1][j][k - 1][p][q] += nk * f[i][j][k][p][q];
-              if (k > 0)
-                f[i + 1][j][k    ][p][q] += nk * 2 * f[i][j][k][p][q];
-              f[i + 1][max(j, k + 1)][k + 1][p][q] += nk * f[i][j][k][p][q];
-            }
+    int a[N] = {0};
+    for(int i = 0; i < N; i++) a[i] = rand();
 
-  double num = 0, den = 0;
-  for (int j = 1; j <= n; ++j) {
-    double v = f[n][j][1][1][1];
-    if (!v) break;
-    num += j * v;
-    den += v;
-    // printf("%d: %f\n", j, v);
-  }
-  printf("ans = %.6f\n", num / den);
-  return 0;
+    startT = clock();
+    //bubble_sort(a, 0, N-1);
+    quick_sort(a, 0, N-1);
+    endT = clock();
+    cout << "Data size : " << N << endl;
+    cout << "Run time is : " << (double)(endT - startT) / CLOCKS_PER_SEC << endl;
+
+    for(int j = 1; j < N; j++) if(a[j-1] > a[j]) cout << "No sorted" << endl;
+
+    return 0;
 }
