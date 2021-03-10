@@ -8,7 +8,7 @@
 */
 
 using namespace std;
-const int N = 20000;
+const int N = 100000;
 
 void quick_sort(int a[], int left, int right){
     /* 
