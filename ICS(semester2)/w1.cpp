@@ -8,7 +8,7 @@
 */
 
 using namespace std;
-const int N = 50000;
+const int N = 20000;
 
 void quick_sort(int a[], int left, int right){
     /* 
@@ -61,7 +61,7 @@ int main() {
     quick_sort(a, 0, N-1);
     endT = clock();
     cout << "Data size : " << N << endl;
-    cout << "Run time is : " << (double)(endT - startT) / CLOCKS_PER_SEC << endl;
+    cout << "Run time is : " << (double)(endT - startT) / clock_t(1) << "ms" << endl;
 
     for(int j = 1; j < N; j++) if(a[j-1] > a[j]) cout << "No sorted" << endl;
 

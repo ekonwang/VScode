@@ -36,7 +36,26 @@ const int N = 1000010;
 // u can convert to v if and only if : 1) u's significant bits more than v; 2) v's every bits is no lower than
 // the corresponding bit in u; 3) v bigger than u; 
 il void solve(){
-    
+    int t, u, v, f;
+    cin >> t;
+    while(t--) {
+        f = 0;
+        cin >> u >> v;
+        vector <int> vec_u, vec_v;
+        int size_v;
+        if(u > v) {cout << "No" << endl; continue; }
+        else if(u == v) {cout << "Yes" << endl; continue; }
+        else {
+            FOR(i, 0, 30) {
+                int tmp = 1 << i;
+                if(tmp & u) vec_u.push_back(i);
+                if(tmp & v) vec_v.push_back(i); 
+            }
+            if (vec_u.size() < (size_v = vec_v.size())) {cout << "No" << endl; continue; }
+            FOR(i, 0, size_v-1) if(vec_u[i] > vec_v[i]) {cout << "No" << endl; f = 1; break; }
+            if(!f) cout << "Yes" << endl;
+        }
+    }
 }
 
 int main() {
