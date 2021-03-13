@@ -32,9 +32,26 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
 }
 
 const int N = 100100;
+LL t, n, p, k, x, y;
+string s, ans[N];
 
 il void solve() {
+    cin >> t;
+    while(t--){
+        cin >> n >> p >> k >> s >> x >> y;
+        string r(s.rbegin(), s.rend());
+
+        FOR(i, 0, k-1){
+            int count = (n-1-i)/k;
+            int rem = (n-1-i)%k;
+            while(rem + 1 < p) { count --; rem += k; } 
+            if(count <= 0) continue;
+            FOR(j, 0, count-1){
+                
+            }
     
+        }
+    }
 }
 
 int main() {

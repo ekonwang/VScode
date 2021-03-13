@@ -32,9 +32,22 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
 }
 
 const int N = 100100;
+LL t, n, a[N];
 
 il void solve() {
-    
+    cin >> t;
+    a[0] = 0;
+    while(t--){
+        cin >> n;
+        int tp = 1, ma = 0;
+        FOR(i, 1, n) {
+            cin >> a[i];
+            if(a[i] == a[i-1]) tp++;
+            else tp = 1;
+            ma = max(tp, ma);
+        }
+        cout << ma << endl;
+    }
 }
 
 int main() {

@@ -32,9 +32,40 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
 }
 
 const int N = 100100;
+LL t, n, k, s[121], c[121], a[121];
+
+il void pre(){
+    memset(s, 0, sizeof(s));
+    memset(c, 0, sizeof(c));
+    FOR(i, 1, n){
+        LL v;
+        cin >> v;
+        // if (c[v] >= k || c[v] <= 0) { s[v] ++;} 
+        if (c[v] == 0) { s[v] ++;}
+
+        /* FOR(j, 1, 100){
+            if(c[j] >= 0) c[j] ++;
+        } */
+
+        FOR(j, 1, 100){
+            c[j] = (c[j] + 1) % k;
+        }
+        c[v] = 0;
+    }
+}
 
 il void solve() {
-    
+    cin >> t;
+    while(t--){
+        cin >> n >> k;
+        pre();
+        LL m = 0;
+        FOR(i, 1, 100) m = max(s[i], m);
+
+        if(n == m) cout << 0 << endl;
+        else cout << (n - m - 1) / k + 1 << endl;
+        // res = (n- max(s) - 1)/k + 1
+    }
 }
 
 int main() {
@@ -42,3 +73,4 @@ int main() {
     solve();
     return 0;
 }
+/* 还有什么特殊情况？？？？ */

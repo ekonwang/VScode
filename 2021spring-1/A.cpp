@@ -32,9 +32,41 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
 }
 
 const int N = 100100;
+LL t, q, v, d, b[10], c[10];
+il void p(){
+    c[0] = 1;
+    FOR(i, 1, 9) c[i] = c[i-1] * 10;
+}
+il void pre(){
+    b[0] = d;
+    FOR(i, 1, 9) b[i] = b[i-1] * 10;
+}
 
-il void solve() {
-    
+bool ifv(LL a){
+    if(a <= 0) return false;
+    LL tp = a;
+    REP(i, 9, 0) { 
+        if(tp / c[i] == d) return true;    //xiafan 这里写错导致浪费了大量时间
+        tp %= c[i];
+    }
+    FOR(i, 0, 9) {
+        if (ifv(a - b[i])) return true;
+    }
+    return false;
+}
+
+void solve() {
+    cin >> t;
+    p();
+    while(t--){
+        cin >> q >> d;
+        pre();
+        while(q --){
+            cin >> v;
+            if(ifv(v)) cout << "YES" << endl;
+            else cout << "NO" << endl;
+        }
+    }
 }
 
 int main() {
