@@ -56,7 +56,7 @@ il void solve() {
             if(a[i] > a[i-1] + 1) Mex = a[i-1] + 1; 
         }else Mex = 0;
         if(Mex == -1) Mex = a[n-1] + 1;
-
+        // you can also use MAP.
         mid = (Mex + Max + 1)/2;
         FOR(i, 0, n-1) if(a[i] == mid) f = 1;
 

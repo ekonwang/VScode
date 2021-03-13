@@ -32,9 +32,8 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
 }
 
 const int N = 100010;
-/////////////////////////////////////////////////////////////////////////////////////////
 il double Sqrt(LL ar){
-    double r = ar, l = 0, p = 1e-18, mid, dl;
+    double r = ar, l = 0, p = 1e-12, mid, dl;
     mid = (r + l)/2;
     dl = mid * mid;
     while(fabs(dl - ar) > p){
@@ -65,8 +64,9 @@ il void solve() {
             // so : How to output result with high precision.
             // The type of data influences precision
             // U made it. But a little bit too late.
+            // from now on, use LL, no int any more.
             LL tpx = a[i], tpy = b[i];
-            r += sqrt(tpx * tpx + tpy * tpy);
+            r += Sqrt(tpx * tpx + tpy * tpy);
         }
         cout << setprecision(20) << r << endl;
     }

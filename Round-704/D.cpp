@@ -31,11 +31,47 @@ template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
     cin >> p.first >> p.second; return in;
 }
 
-const int N = 1000010;
-/////////////////////////////////////////////////////////////////////////////////////////
+const LL N = 100010;
 
 il void solve() {
-    
+    LL n, a[N], dk, ik, ps, v, b, dr = 0, ir = 0, dm = 0, im = 0, tp;
+    cin >> n >> b;
+    // get a[n]
+    FOR(i, 1, n-1) {
+        cin >> v;
+        if(v > b) a[i] = 1;
+        else a[i] = -1;
+        b = v;
+    }a[0] = -a[1];
+    // trival case
+    if(n == 1) cout << 1 << endl;
+    // get longest
+    ps = 1;
+    while(ps <= n-1){
+        tp = 2;
+        if(a[ps] < 0) {
+            while(ps < n-1 && a[ps] + a[ps+1]) {ps++; tp ++;}
+            if (tp > dm) {
+                dr = 0;
+                dm = tp;
+                dk = ps;
+            }else if(tp == dm) dr = 1;
+            ps++;
+            continue;
+        }
+        while(ps < n-1 && a[ps] + a[ps+1]) {ps++; tp++; }
+        if(tp > im) {
+            ir = 0;
+            im = tp;
+            ik = ps;
+        }else if(tp == im) ir = 1;
+        ps ++;
+    }
+    // 
+    if(im != dm || ir || dr || dk - ik + 1 != im || dm % 2 == 0) {
+        cout << 0 << endl;
+        return;
+    }else cout << 1 << endl;
 }
 
 int main() {
