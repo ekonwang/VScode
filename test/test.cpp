@@ -16,10 +16,8 @@ double Sqrt(LL ar){
     return mid;
 }
 int main(){
-    LL r = 100000000000000023;
-    cout << setprecision(20) << sqrt(r) << endl;
-    // int a[N] = {52, 34, 13, 2};
-    // for(int i = 0; i < N; i++) r += sqrt(a[i]);
-    // cout << r << endl;
+    LL t = 2;
+    LL tp = 0x7fffffffffffffff;
+    cout << tp << endl;
     return 0;
 }

@@ -4,37 +4,42 @@ using namespace std;
 #define il inline
 #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)
 #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)
-#define all(x) = (x).begin(),(x).end()
-#define rall(x) = (x).rbegin(),(x).rend()
 
 typedef long long LL;
 typedef unsigned int u32;
 typedef unsigned long long u64;
 typedef long double LD;
 
-template<class T> ostream &operator << (ostream& out, const vector<T>& arr) {
-    cout << "{"; for (int i = 0; i < arr.size(); i++)cout << (!i ? "" : ", ") << arr[i]; cout << "}";
-    return out;
-}
-template<class T> ostream &operator << (ostream& out, const vector<vector<T> >& arr) {
-    cout << "{\n"; for (auto& vec : arr)cout << "  " << vec << ",\n"; cout << "}";
-    return out;
-}
-template<class S,class T> ostream &operator << (ostream& out, const pair<S,T>& p){
-    cout << "{" << p.first << "," << p.second << "}" << '\n';
-    return out;
-}
-template<class T> istream &operator >> (istream& in, vector<T>& arr) {
-    for (auto& i : arr)cin >> i; return in;
-}
-template<class S,class T> istream &operator >> (istream& in,pair<S,T>& p){
-    cin >> p.first >> p.second; return in;
-}
-
-const int N = 100100;
+const int N = 200000 + 5;
+LL a[N], n, t, v, f;
 
 il void solve() {
-    
+    cin >> t;
+    while (t--) {
+        f = 0;
+        cin >> n;
+        LL tp = n << 1;
+        for (int i = 1; i <= tp; i++) {  //bug1
+            cin >> a[i];
+        }
+        sort(a + 1, a + tp + 1);
+        for (int i = 1; i < tp; i += 2) {
+            if (a[i] != a[i + 1]) { f = 1; break; }
+        }
+        if (f) { cout << "NO" << endl; continue; }
+        if (a[tp] % tp) { cout << "NO" << endl; continue; }
+        LL dn = a[tp] / tp;
+        for (int i = tp - 2; i >= 2; i -= 2) {
+            LL tmp = i * dn - a[i + 2] + a[i];
+            if (tmp % i || a[i+2] == a[i]) { f = 1; break; }
+            LL dc = tmp / i;
+            if (dc <= 0) { f = 1; break; }
+            dn = dc;
+        }
+        if (f) { cout << "NO" << endl; continue; }
+
+        cout << "YES" << endl;
+    }
 }
 
 int main() {
@@ -42,3 +47,7 @@ int main() {
     solve();
     return 0;
 }
+
+//小bug
+//没有充分理解题意
+//没有注意是否产生溢出
