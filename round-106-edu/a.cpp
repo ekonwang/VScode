@@ -25,7 +25,7 @@ il void solve() {
         }else if(min(n-k1, n-k2) + (max(n-k1, n-k2) - min(n-k2, n-k1))/2 < b) {
             cout << "NO" << endl;
             continue;
-        }
+        } 
         cout << "YES" << endl;
 
     }
