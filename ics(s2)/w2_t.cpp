@@ -57,9 +57,14 @@ int main() {
     }
     clock_t bc, ec;
     srand(time(0));
+
+    bc = clock();
     for(int i = 0; i < N; i++) {
         a[i] = rand();
     }
+    ec = clock();
+    cout << "array assignments completed : " << (double)(ec - bc) << "ms" << endl;
+
     bc = clock();
     effective_memset(a, 0, N * sizeof(int));
     ec = clock();
