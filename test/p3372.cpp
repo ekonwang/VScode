@@ -7,32 +7,20 @@ using namespace std;
 #define lson l, mid, rt << 1
 #define rson mid + 1, r, rt << 1 | 1
 using namespace std;
-int const MAX = 200005;
+int const MAX = 110000;
 ll const INF = 0x7fffffffffffffff;
 char s[100];
-ll mi[MAX << 2], lazy[MAX << 2];
-int n, q;
+ll mi[MAX << 1], lp[MAX << 1], lm[MAX << 1];
+int n, m, p;
  
 void PushUp(int rt)
 {
-	mi[rt] = min(mi[rt << 1], mi[rt << 1 | 1]);
+    mi[rt] = mi[rt << 1] + mi[rt << 1|1];
 }
- 
-void PushDown(int rt)
-{
-	if(lazy[rt])
-	{
-		mi[rt << 1] += lazy[rt];
-		mi[rt << 1 | 1] += lazy[rt];
-		lazy[rt << 1] += lazy[rt];
-		lazy[rt << 1 | 1] += lazy[rt];
-		lazy[rt] = 0;
-	}
-}
- 
+
 void Build(int l, int r, int rt)
 {
-	lazy[rt] = 0;
+	lp[rt] = lm[rt] = 0;
 	if(l == r)
 	{
         cin >> mi[rt];
@@ -43,21 +31,58 @@ void Build(int l, int r, int rt)
 	Build(rson);
 	PushUp(rt);
 }
- 
-void Update(int L, int R, int c, int l, int r, int rt)
+
+void PushDownM(int rt)
+{
+    if(ll tmp = lm[rt]) 
+    {
+        lm[rt << 1] *= tmp;
+        mi[rt << 1] *= tmp;
+        lm[rt << 1|1] = tmp;
+        mi[rt << 1|1] *= tmp; 
+        lm[rt] = 0;
+    }
+}
+
+void PushDownP(int rt)
+{
+    if(ll tmp = lp[rt])
+    {
+        lp[rt << 1] += tmp;
+        
+    }
+}
+
+void UpdateM(int L, int R, int c, int l, int r, int rt)
 {
 	if(L <= l && r <= R)
+	{
+		mi[rt] *= c;
+		lm[rt] *= c;
+		return;
+	}
+	ll mid = (l + r) >> 1;
+	PushDownM(rt);
+	if(L <= mid)
+		Update(L, R, c, lson);
+	if(mid < R)
+		Update(L, R, c, rson);
+	PushUp(rt);
+}
+void UpdateP(int L, int R, int c, int l, int r, int rt)
+{
+    if(L <= l && r <= R)
 	{
 		mi[rt] += c;
 		lazy[rt] += c;
 		return;
 	}
-	ll mid = (l + r) >> 1;
-	PushDown(rt);
+    ll mid = (l + r) >> 1;
+	PushDownP(rt);
 	if(L <= mid)
-		Update(L, R, c, lson);
+		UpdateP(L, R, c, lson);
 	if(mid < R)
-		Update(L, R, c, rson);
+		UpdateP(L, R, c, rson);
 	PushUp(rt);
 }
  
@@ -77,13 +102,22 @@ ll Query(int L, int R, int l, int r, int rt)
  
 int main()
 {
-	cin >> n;
+	cin >> n >> m >> p;
 	Build(1, n, 1);
-	cin >> q;
-	while(q --)
+	while(m--)
 	{
-		int l, r, c;
-		cin >> l >> r;
+		int ins, l, r, c;
+        cin >> ins >> l >> r;
+        if(ins == 1) {
+            cin >> c;
+
+        }
+        else if (ins == 2) {
+
+        }
+        else {
+
+        }
 		l ++;
 		r ++;
 		if(getchar() == ' ')
