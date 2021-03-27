@@ -5,9 +5,10 @@
 #define usn unsigned                                                         //*
 #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
 #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
-ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
-int const MAXINT = 0x7fffffff;                                               //*
+#define MAXLL 0x7fffffffffffffff                                             //*
+#define MAXINT 0x7fffffff                                                    //*
 const int INF = 0x3f3f3f3f;                                                  //*
+const ll INF_LL = 9223372036854775807LL;                                     //*
 const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
@@ -33,22 +34,24 @@ void init_cin(){                                                             //*
   std::cout.tie(nullptr);                                                    //*
 }                                                                            //*
 using namespace std;                                                         //*
-
-int cmp(pair<int,int>a,pair<int,int>b){
-    return a.first < b.first || (a.first == b.first && a.second < b.second);
-}
 //---------------------------------------------------------------------------//*
 
 
 
 const int N = 100000 + 5;
 
-void solve() {
-    
+ll solve(ll a,ll b,ll x,ll y) {
+    ll g = gcd(x, y);
+    x /= g;
+    y /= g;
+    ll m = min(a/x, b/y);
+    return m;
 }
 
 int main() {
     init_cin();
-    solve();
+    ll a, b, x, y;
+    cin >> a >> b >> x >> y;
+    cout << solve(a, b, x, y) << endl;
     return 0;
 }

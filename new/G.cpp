@@ -42,9 +42,22 @@ int cmp(pair<int,int>a,pair<int,int>b){
 
 
 const int N = 100000 + 5;
+int n, q, r, a[N];
 
 void solve() {
-    
+    cin >> q;
+    while(q--) {
+        cin >> n >> r;
+        FOR(i, 1, n) cin >> a[i];
+        sort(a + 1, a + n + 1);
+        int m = unique(a + 1, a + n + 1) - a - 1;
+        REP(i, m, 1) {
+            if(i-1 == 0|| a[i-1] <= (m-i+1) * r) {
+                cout << m-i+1 << endl;
+                break;
+            }
+        }
+    }
 }
 
 int main() {

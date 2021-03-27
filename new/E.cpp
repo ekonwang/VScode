@@ -5,9 +5,10 @@
 #define usn unsigned                                                         //*
 #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
 #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
-ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
-int const MAXINT = 0x7fffffff;                                               //*
+#define MAXLL 0x7fffffffffffffff                                             //*
+#define MAXINT 0x7fffffff                                                    //*
 const int INF = 0x3f3f3f3f;                                                  //*
+const ll INF_LL = 9223372036854775807LL;                                     //*
 const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
@@ -33,18 +34,22 @@ void init_cin(){                                                             //*
   std::cout.tie(nullptr);                                                    //*
 }                                                                            //*
 using namespace std;                                                         //*
-
-int cmp(pair<int,int>a,pair<int,int>b){
-    return a.first < b.first || (a.first == b.first && a.second < b.second);
-}
 //---------------------------------------------------------------------------//*
 
 
 
-const int N = 100000 + 5;
+const int N = 1000 + 5;
+ll a[N], n;
 
 void solve() {
-    
+    ll res = 0;
+    cin >> n;
+    FOR(i, 1, n) cin >> a[i];
+    sort(a + 1, a + n + 1);
+    FOR(i, 2, n) {
+        res += a[i] - a[i-1] - 1;
+    }
+    cout << res << endl;
 }
 
 int main() {

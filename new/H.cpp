@@ -5,9 +5,10 @@
 #define usn unsigned                                                         //*
 #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
 #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
-ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
-int const MAXINT = 0x7fffffff;                                               //*
+#define MAXLL 0x7fffffffffffffff                                             //*
+#define MAXINT 0x7fffffff                                                    //*
 const int INF = 0x3f3f3f3f;                                                  //*
+const ll INF_LL = 9223372036854775807LL;                                     //*
 const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
@@ -32,7 +33,7 @@ void init_cin(){                                                             //*
   std::cin.tie(nullptr);                                                     //*
   std::cout.tie(nullptr);                                                    //*
 }                                                                            //*
-using namespace std;                                                         //*
+using namespace std;     
 
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
@@ -41,10 +42,37 @@ int cmp(pair<int,int>a,pair<int,int>b){
 
 
 
-const int N = 100000 + 5;
+const int N = 200000 + 5;
+int dp[N], r[N], n, m, d;
+pair<int, int> a[N];
+queue<int> q;
+
+// 贪心算法
 
 void solve() {
-    
+    ll ans = 0;
+    cin >> n >> m >> d;
+    FOR(i, 1, n) {
+        cin >> a[i].first;
+        a[i].second = i;
+    }
+    sort(a + 1, a + n + 1, cmp);
+    FOR(i, 1, n) {
+        if(q.empty() || q.front() + d >= a[i].first) {
+            dp[i] = ++ans;
+        }else{
+            dp[i] = dp[q.front()];
+            q.pop();
+        }
+        q.push(i);
+    }
+    FOR(i, 1, n) {
+        r[a[i].second] = dp[i];
+    }
+    cout << ans << endl;
+    FOR(i, 1, n) {
+        cout << r[i] << " ";
+    }
 }
 
 int main() {
