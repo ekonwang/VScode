@@ -5,10 +5,9 @@
 #define usn unsigned                                                         //*
 #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
 #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
-#define MAXLL 0x7fffffffffffffff                                             //*
-#define MAXINT 0x7fffffff                                                    //*
+ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
+int const MAXINT = 0x7fffffff;                                               //*
 const int INF = 0x3f3f3f3f;                                                  //*
-const ll INF_LL = 9223372036854775807LL;                                     //*
 const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
@@ -33,7 +32,7 @@ void init_cin(){                                                             //*
   std::cin.tie(nullptr);                                                     //*
   std::cout.tie(nullptr);                                                    //*
 }                                                                            //*
-using namespace std;     
+using namespace std;                                                         //*
 
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
@@ -42,37 +41,49 @@ int cmp(pair<int,int>a,pair<int,int>b){
 
 
 
-const int N = 200000 + 5;
-int dp[N], r[N], n, m, d;
-pair<int, int> a[N];
-queue<int> q;
+const int N = 100000 + 5;
+int a[N], b[N], h1, h2, n, m, tp[N << 1];
 
-// 贪心算法
+int help(int r1, int r2) {
+    int p = 0;
+    FOR(i, 1, n) {
+        if(a[i] % 4 == r1) tp[++p] = a[i];
+    }
+    FOR(i, 1, m) {
+        if(b[i] % 4 == r2) tp[++p] = b[i];
+    }
+    sort(tp + 1, tp + p + 1);
+    return unique(tp + 1, tp + p + 1) - tp - 1;
+}
+
+// 使用unique常犯的错误： 当起始位置为1时应该将 返回值减去tp + 1而非tp
 
 void solve() {
-    ll ans = 0;
-    cin >> n >> m >> d;
+    //r1 : all odd
+    //r2 : all even
+    //r3 : up odd down even
+    //r4 : up even down odd
+    int res = 0, r1 = 0, r2 = 0, r3 = 0, r4 = 0;
+    cin >> n >> h1;
+    FOR(i, 1, n) cin >> a[i];
+    cin >> m >> h2;
+    FOR(i, 1, m) cin >> b[i];
+
     FOR(i, 1, n) {
-        cin >> a[i].first;
-        a[i].second = i;
+        if(a[i] % 2) r4 ++;
+        else r3 ++;
     }
-    sort(a + 1, a + n + 1, cmp);
-    FOR(i, 1, n) {
-        if(q.empty() || q.front() + d >= a[i].first) {
-            dp[i] = ++ans;
-        }else{
-            dp[i] = dp[q.front()];
-            q.pop();
-        }
-        q.push(i);
+    FOR(i, 1, m) {
+        if(b[i] % 2) r3++;
+        else r4++;
     }
-    FOR(i, 1, n) {
-        r[a[i].second] = dp[i];
-    }
-    cout << ans << endl;
-    FOR(i, 1, n) {
-        cout << r[i] << " ";
-    }
+
+    r1 = max(help(1, 3) , help(3, 1)); 
+    r2 = max(help(0, 2), help(2, 0));
+
+    res = max(max(max(max(res, r1), r2), r3), r4);
+
+    cout << res << endl;
 }
 
 int main() {

@@ -5,8 +5,8 @@
 #define usn unsigned                                                         //*
 #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
 #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
-#define MAXLL 0x7fffffffffffffff                                             //*
-#define MAXINT 0x7fffffff                                                    //*
+ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
+int const MAXINT = 0x7fffffff;                                               //*
 const int INF = 0x3f3f3f3f;                                                  //*
 const ll INF_LL = 9223372036854775807LL;                                     //*
 const double E = exp(1.0);                                                   //*
@@ -36,50 +36,78 @@ void init_cin() {                                                            //*
 using namespace std;                                                         //*
 //---------------------------------------------------------------------------//*
 
+// debug思路:
+// 算法是否正确 -> 程序是否严格按照我算法的思路严格执行 -> 找到一组错误数据使用单步调试找到问题所在 
+// 算法写得清晰不容易出错很重要，不要把程序写得乱七八糟
 
 
 const int N = 200000 + 5;
-int n, h, a[N], b[N], x1, x2;
+int n, h, a[N], b[N], s[N], c[N], dp[N];
 // O(n)算法 贪心
 
 void solve() {
-    ll ans = 0, tp = 0;
+    ll ans = 0, tp = 0, d = 1, i, j;
     cin >> n >> h;
-    x1 = x2 = 0;
-    FOR(i, 1, n) {
-        cin >> x1;
-        b[i - 1] = x1 - x2;
-        cin >> x2;
-        a[i] = x2 - x1;
-    }
-    b[n] = b[0] = 0;
+    memset(a, 0, sizeof(a));
+    memset(b, 0, sizeof(b));
+    memset(s ,0, sizeof(s));
+    memset(c, 0, sizeof(c));
+    memset(dp, 0, sizeof(dp));
 
-    int r = h, drop = 0, ad;
-    while (r > 0) {
-        drop++;
-        r -= b[drop];
-        tp += (a[drop] + b[drop - 1]);
-        if (drop >= n) break;
+    FOR(i, 1, n) cin >> a[i] >> b[i];
+    FOR(i, 1, n) {
+        c[i] = c[i-1];
+        s[i] = s[i-1];
+        s[i] += (b[i] - a[i]);
+        c[i] += (a[i+1] - b[i]);
     }
-    if (drop >= n) { cout << tp + r << endl; return; }
-    
-    ad = (r + b[drop]);
-    ans = max(ans, tp + ad);
-    FOR(i, 1, n - 1) {
-        r += b[i];
-        tp -= (b[i] + a[i]);
-        while (r > 0) {
-            drop++;
-            r -= b[drop];
-            tp += (a[drop] + b[drop - 1]);
-            if (drop >= n) break;
+    c[n] = MAXINT;
+
+    // drop = 掉落在第几个b区间
+    tp = h;
+    for(i = 1; i <= n; i++) {
+        for(j = d; j <= n; j++) {
+            int tmp = c[i-1];
+            if(c[j-1] - tmp < tp && tp <= c[j] - tmp) { 
+                d = j;
+                dp[i] = s[d] - s[i-1];
+                break;
+            }
         }
-        if (drop >= n) { cout << tp + r << endl; return; }
-        ad = (r + b[drop]);
-        ans = max(ans, tp + ad);
+        if(d == n) break;
     }
-    cout << ans << endl;
+    int res = 0;
+    FOR(k, 1, i) {
+        res = max(res, dp[k]);
+    }
+    cout << res + h << endl;
 }
+
+// int r = h, drop = 0, ad;
+// while (r > 0) {
+//     drop++;
+//     r -= b[drop];
+//     tp += (a[drop] + b[drop - 1]);
+//     if (drop >= n) break;
+// }
+// if (drop >= n) { cout << tp + r << endl; return; }
+
+// ad = (r + b[drop]);
+// ans = max(ans, tp + ad);
+// FOR(i, 1, n - 1) {
+//     r += b[i];
+//     tp -= (b[i] + a[i]);
+//     while (r > 0) {
+//         drop++;
+//         r -= b[drop];
+//         tp += (a[drop] + b[drop - 1]);
+//         if (drop >= n) break;
+//     }
+//     if (drop >= n) { cout << tp + r << endl; return; }
+//     ad = (r + b[drop]);
+//     ans = max(ans, tp + ad);
+// }
+// cout << ans << endl;
 
 int main() {
     init_cin();
