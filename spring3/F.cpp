@@ -12,12 +12,6 @@ const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
 ll lcd(ll a , ll b){return a * b / gcd(a,b);}                                //*
-inline ll read(){                                                            //*
-    char ch = getchar(); ll x = 0, f = 1;                                    //*
-    while(ch < '0' || ch > '9') {if(ch == '-') f = -1; ch = getchar();}      //*
-    while('0' <= ch && ch <= '9') {x = x * 10 + ch - '0'; ch = getchar();}   //*
-    return x * f;                                                            //*
-}                                                                            //*
 inline void write(ll x)                                                      //*
 {                                                                            //*
     if(x<0) {                                                                //*
@@ -39,9 +33,17 @@ int cmp(pair<int,int>a,pair<int,int>b){
 }
 //---------------------------------------------------------------------------//*
 
+/* 
+divide and conquer
+dp
+math
 
+so not a easy stuff 
 
-const int N = 100000 + 5;
+the conclusion is that k is always 2's power
+*/
+
+/* const int N = 100000 + 5;
 int a[N], b[N], h1, h2, n, m, tp[N << 1];
 
 int help(int r1, int r2) {
@@ -84,10 +86,55 @@ void solve() {
     res = max(max(max(max(res, r1), r2), r3), r4);
 
     cout << res << endl;
+} */
+
+#define fore(i, l, r) for(int i = int(l); i < int(r); i++)
+
+
+const int N = 100 * 1000 + 555;
+
+int n[2], y[2];
+int x[2][N];
+
+inline bool read() {
+	fore(k, 0, 2) {
+		if(!(cin >> n[k] >> y[k]))
+			return false;
+		fore(i, 0, n[k])
+			assert(scanf("%d", &x[k][i]) == 1);
+            //这里的断言很有意思，它解决了什么问题？
+	}
+	return true;
 }
 
+inline void solve() {
+	int ans = 2;
+	for(int dx = 1; dx < int(1e9); dx *= 2) {
+		int mod = 2 * dx;
+		map<int, int> cnt;
+		
+		int add[2] = {0, dx};
+		fore(k, 0, 2) {
+			fore(i, 0, n[k])
+				cnt[(x[k][i] + add[k]) & (mod - 1)]++;
+		}
+        //完美地解决了我的问题：
+        //使用map储存结果，而不用枚举情况，做到了O(nlogn的复杂度)
+        //使用位与运算而非求余运算，这是一个重要的优化
+        //数组储存在一个二维数组中，巧妙的书写提高了代码复用度
+        //非常值得学习
+		
+		for(auto curAns : cnt)
+			ans = max(ans, curAns.second);
+	}
+	cout << ans << endl;
+}
+
+
 int main() {
-    init_cin();
-    solve();
+    if(read()){
+        solve();
+    }
+    
     return 0;
 }
