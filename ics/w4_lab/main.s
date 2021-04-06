@@ -735,7 +735,7 @@ Disassembly of section .text:
  a9d:	48 01 d0             	add    %rdx,%rax
  aa0:	8b 00                	mov    (%rax),%eax
  aa2:	89 c6                	mov    %eax,%esi
- aa4:	48 8d 3d 9e 02 00 00 	lea    0x29e(%rip),%rdi        # d49 <_IO_stdin_used+0xc9>
+ aa4:	48 8d 3d 9e 02 00 00 	lea    0x29e(%rip),%rdi        # d49 <_IO_stdin_used+0xc9>s
  aab:	b8 00 00 00 00       	mov    $0x0,%eax
  ab0:	e8 5b fc ff ff       	callq  710 <printf@plt>
  ab5:	83 45 fc 01          	addl   $0x1,-0x4(%rbp)
