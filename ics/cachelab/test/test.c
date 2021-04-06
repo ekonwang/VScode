@@ -138,10 +138,12 @@ int evict(long long ind, long long p) {
     if(flag) printf(" eviction");
     eviction_count++;
     cache_put(ind, p);
+    return 1;
 }
 
 int warm_up(long long ind, long long p) {
     cache_put(ind, p);
+    return 1;
 }
 
 void cache_put(long long ind, long long p) {
