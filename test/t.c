@@ -8,13 +8,11 @@ int main(int argc, char* argv[])
 
     int i;  
 
-    char** p = environ;  
+    char** p = argv;  
 
-    for(i=0; i<argc; i++)  
-
-        printf("argv[%d]: %s\n", i, argv[i]);  
-
-    printf("\n\nEnviroment Varibles\n\n");  
+    if(!argc) 
+	
+	printf("\n%d\n", argc);
 
     while(*p != NULL)  
 
