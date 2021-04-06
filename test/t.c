@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 
     while(*p != NULL)  
 
-        printf("%s\n", *(p++));  
+        printf("%s\n", *(p++) );  
 
     return 0;  
 }
