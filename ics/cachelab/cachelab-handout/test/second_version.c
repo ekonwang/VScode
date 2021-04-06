@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <string.h>
-#include "cachelab.h"
 
 typedef struct _cash{
     long long ind;
@@ -66,11 +65,31 @@ int main(int argc, char *argv[]){
     
     init_cache();  
     run();
+    //test_file_stream();
     free_cache();
-    printSummary(hit_count, miss_count, eviction_count);
+    printf("\n%d %d %d\n", hit_count, miss_count, eviction_count);
     
     return 0;
 }
+
+void test_file_stream() {
+    FILE *F = NULL;
+    long long addl, ind, p;
+    char first[15], second[15], instr;
+
+    F = freopen(filepath, "r", stdin);
+    if(!F) 
+        exit(233);
+
+    while(scanf("%s%s", &first[0], &second[0]) != EOF){
+        if(flag) 
+            printf("\n%s %s", first, second);
+        str2ins(&instr, &addl, first, second);
+
+    }
+    fclose(F);
+}
+
 
 void run() {
     FILE *F = NULL;

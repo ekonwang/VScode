@@ -34,4 +34,13 @@ void correctTrans(int M, int N, int A[N][M], int B[M][N]);
 void registerTransFunction(
     void (*trans)(int M,int N,int[N][M],int[M][N]), char* desc);
 
+void printSummary(int hits, int misses, int evictions)
+{
+    printf("hits:%d misses:%d evictions:%d\n", hits, misses, evictions);
+    FILE* output_fp = fopen(".csim_results", "w");
+    assert(output_fp);
+    fprintf(output_fp, "%d %d %d\n", hits, misses, evictions);
+    fclose(output_fp);
+}
+
 #endif /* CACHELAB_TOOLS_H */

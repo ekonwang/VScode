@@ -4,9 +4,11 @@
 #include <string.h>
 
 int main() {
-    for(int i = 0; i < 10; ++i) {
-        printf("%s", i % 5?"":"y\n");
-    }
+    int heap_id = 1342433553;
+    int s = 3, S = 1 << s;
+    int mask = ~(-1 << s);
+    int col = heap_id & ~(-1 << s);
+    printf("%d %d %x", col, heap_id % S, mask);
     exit(123);
     return 0;
 }
