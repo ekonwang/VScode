@@ -41,10 +41,35 @@ int cmp(pair<int,int>a,pair<int,int>b){
 
 
 
-const int N = 100000 + 5;
+const double pi = 3.14159265;
+int n;
+double xi, yi, xh, yh, xr, yr, xo, yo, r;
 
 void solve() {
-    
+    double t, delta;
+    cin >> n;
+    cin >> xi >> yi >> xh >> yh;
+    xo = (xi + xh) / 2;
+    yo = (yi + yh) / 2;
+    r = sqrt((xi - xo) * (xi - xo) + (yi - yo) * (yi - yo));
+    xi -= xo;
+    yi -= yo;
+    xh -= xo;
+    yh -= yo;
+    //t = atan(yi / xi);
+    t = atan2(yi , xi);
+    delta = 2 * PI / (double)n;
+    if(yi == 0.0) {
+        if(xi < 0.0) t += pi;
+    }else{
+        if(yi < 0.0) t += pi;
+    }
+    xr = cos(t + delta) * r;
+    yr = sin(t + delta) * r;
+    xr += xo;
+    yr += yo;
+    //cout << "r " << r << "t " << t * 180.0 / pi << "delta " << delta * 180.0 / pi << endl; 
+    cout << setprecision(15) << xr << " " << yr << endl;
 }
 
 int main() {

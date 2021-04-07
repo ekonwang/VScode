@@ -1,6 +1,8 @@
 #include <iostream>
+#include <string>
+using namespace std;
 
 int main(){
-    foo(0);
+    string str = " 2";
     return 0;
 }
