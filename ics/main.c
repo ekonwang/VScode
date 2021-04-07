@@ -38,6 +38,7 @@ int main(){
             case 3:
                 printResult(b, LENGTH, "\noriginal array:\t");
                 printResult(a, LENGTH, "\nsorted array:\t");
+		break;
             case 4:
                 flag = false;
                 break;
