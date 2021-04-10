@@ -37,6 +37,10 @@ using namespace std;                                                         //*
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
 }
+void clear(queue<int>& q) {
+	queue<int> empty;
+	swap(empty, q);
+}
 //---------------------------------------------------------------------------//*
 
 

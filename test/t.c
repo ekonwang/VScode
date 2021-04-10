@@ -1,22 +1,18 @@
-#include "stdio.h"  
+#include <stdio.h>
+#include <stdlib.h>
 
-extern char** environ;   /*C库定义的全局变量,环境变量字符串数组的起始地址*/  
-
-int main(int argc, char* argv[])  
-
+int main(int argc, char* argv[], char* envp[])  
 {  
+    int i = 0;  
+    printf("\ncm line args:\n");
+    printf("\targv[ 0]: %s\n", argv[0]);
+    while(argv[i] != NULL)
+        printf("\targv[ %d]: %s\n", i, argv[i++]);
 
-    int i;  
-
-    char** p = argv;  
-
-    if(!argc) 
-	
-	printf("\n%d\n", argc);
-
-    while(*p != NULL)  
-
-        printf("%s\n", *(p++) );  
-
-    return 0;  
+    i = 0;
+    printf("\nev args:\n");
+    while(envp[i] != NULL)
+        printf("\tenvp[ %d]: %s\n", i, envp[i++]);
+    
+    return 0;
 }
