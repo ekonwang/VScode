@@ -397,34 +397,6 @@ void Fstat(int fd, struct stat *buf)
  * Wrappers for directory function
  *********************************/
 
-DIR *Opendir(const char *name) 
-{
-    DIR *dirp = opendir(name); 
-
-    if (!dirp)
-        unix_error("opendir error");
-    return dirp;
-}
-
-struct dirent *Readdir(DIR *dirp)
-{
-    struct dirent *dep;
-    
-    errno = 0;
-    dep = readdir(dirp);
-    if ((dep == NULL) && (errno != 0))
-        unix_error("readdir error");
-    return dep;
-}
-
-int Closedir(DIR *dirp) 
-{
-    int rc;
-
-    if ((rc = closedir(dirp)) < 0)
-        unix_error("closedir error");
-    return rc;
-}
 
 /***************************************
  * Wrappers for memory mapping functions
