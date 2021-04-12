@@ -1,8 +1,8 @@
 #include <iostream>
-#include <string>
 using namespace std;
-
 int main(){
-    string str = " 2";
+    double j = 1.5;
+    int i = (int)j;
+    cout<< i << endl;
     return 0;
 }

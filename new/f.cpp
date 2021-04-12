@@ -41,26 +41,49 @@ int cmp(pair<int,int>a,pair<int,int>b){
 
 
 
-int N, a, b, c, d;
-double radius, t0, tf, e, f, j, k, d_a, d_b, d_c, d_d;
+const int N = 100 + 5;
+int n, a[N], test[N], tot[N], tot2[N], t, f;
+
+bool same(int n, int first[], int second[]){
+    FOR(i, 1, n) if(first[i] != second[i]) return false;
+    return true;
+}
+
+void sum() {
+    FOR(i, 1, n-1)
+        tot2[i] = test[i] + test[i+1];
+    sort(tot2 + 1, tot2 + n);
+}
+
+bool valid() {
+    if(same(n, a, test)) return false;
+    if(same(n-1, tot, tot2)) return true;
+    return false;
+}
+
+void print() {
+    FOR(i, 1, n) cout << test[i] << ' '; cout << endl;
+}
 
 void solve() {
-    cin >> N;
-    cin >> a >> b >> c >> d;
-    d_a = (double)a;
-    d_b = (double)b;
-    d_c = (double)c;
-    d_d = (double)d;
-    //cout << setprecision(10) << " a " << d_a << " b " << d_b << " c " << d_c << " d " << d_d << endl;
-    e = (d_a + d_c)/2;
-    f = (d_b + d_d)/2;
-    t0 = atan2(d_b-f, d_a-e);
-    tf = t0 + (2*PI/N);
-    radius = sqrt((d_a-e)*(d_a-e) + (d_b-f)*(d_b-f));
-    j = cos(tf) * radius + e;
-    k = sin(tf) * radius + f;
-    //cout << setprecision(15) << " e " << e << " f " << f << " r " << radius << endl;
-    cout << setprecision(15) << j << " " << k << endl; 
+    cin >> t;
+
+    while(t --) {
+        f = 0;
+        cin >> n;
+
+        FOR(i, 1, n) cin >> a[i];
+        FOR(i, 1, n) test[i] = i;
+        FOR(i, 1, n-1) tot[i] = a[i] + a[i+1];
+        sort(tot + 1, tot + n);
+
+        do {
+            sum();
+            if(valid()) { print(); break; }
+        }while(next_permutation(test + 1, test + n + 1));
+
+    }
+
 }
 
 int main() {

@@ -46,9 +46,120 @@ void clear(queue<int>& q) {
 
 
 const int N = 100000 + 5;
+int n, k, zeros, ones, buf, t, v;
+char head;
+string s;
+set<int> one, zero;
+queue<int> valible;
+
+void add(int i) {
+    switch(s[i]){
+        case '0':
+            zeros ++;
+            break;
+        case '1':
+            ones ++;
+            break;
+        case '?':
+            valible.push(i);
+            buf++;
+            break;
+    } 
+}
+
+void minu(int head) {
+    char ch = s[head];
+    switch(ch){
+        case '0':
+            zeros --;
+            break;
+        case '1':
+            ones --;
+            break;
+        case '?':
+            if(valible.empty() || valible.front() > head) {
+                if(one.count(head)) 
+                    ones --;
+                else 
+                    zeros --;
+            }
+            else
+                buf--;
+            break;
+    } 
+}
+
+void transfer(){
+    int gap = 0;
+    if(zeros > ones) {
+        if(zeros > ones + buf) v = 0;
+        else {
+            gap = zeros - ones;
+            FOR(i,1,gap) {
+                int p;
+                one.insert(p = valible.front());
+                s[p] = '1';
+                valible.pop();
+            }
+            ones = zeros;
+            buf -= gap;
+        }
+    }
+    else if(ones > zeros) {
+        if(ones > zeros + buf) v = 0;
+        else {
+            gap = ones - zeros;
+            FOR(i, 1, gap) {
+                int p;
+                zero.insert(p = valible.front());
+                s[p] = '0';
+                valible.pop();
+            }
+            zeros = ones;
+            buf -= gap;
+        }
+    }
+}
+
+void run() {
+    
+    one.clear();
+    zero.clear();
+    clear(valible);
+
+    zeros = ones = buf = 0;
+    head = 0;
+
+    FOR(i, 0, k-1) {
+        add(i);
+    }
+    transfer();
+    
+    FOR(i, k, n-1) {
+        if(!v) break;
+
+        minu(head);
+        head = i - k + 1;
+        add(i);
+
+        transfer();
+    }
+    // cout << "s " << s << endl;
+}
 
 void solve() {
-    
+    cin >> t;
+    while(t--) {
+        
+        cin >> n >> k;
+        cin >> s;
+        v = 1;
+
+        run();
+
+        if(v) {run(); if(v) cout << "YES" << endl; else cout << "NO" << endl;} 
+        else cout << "NO" << endl;
+    }
 }
 
 int main() {
