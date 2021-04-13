@@ -28,7 +28,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
     if(M == 32 && N == 32)
     {
         for(ii = 0; ii < N; ii += 8) {
-            for(jj = 0; jj < M; jj += 8) {
+            for(j = 0; j < M; j += 8) {
 
                 for(i = ii; i < (ii + 8); ++i)
 				{
@@ -62,31 +62,32 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 		for (ii = 0; ii < N; ii += 8)
 			for (jj = 0; jj < M; jj += 8)
 			{
-				for (i = ii; i < ii + 4; ++i)
-				{
-					x1 = A[i][j]; x2 = A[i][j+1]; x3 = A[i][j+2]; x4 = A[i][j+3];
-					x5 = A[i][j+4]; x6 = A[i][j+5]; x7 = A[i][j+6]; x8 = A[i][j+7];
+				for (i = ii; i < ii + 4; ++i)          // wierd refrencing way.
+				{                                      // store data temperally in B
+					x1 = A[i][jj]; x2 = A[i][jj+1]; x3 = A[i][jj+2]; x4 = A[i][jj+3];
+					x5 = A[i][jj+4]; x6 = A[i][jj+5]; x7 = A[i][jj+6]; x8 = A[i][jj+7];
 					
-					B[j][i] = x1; B[j+1][i] = x2; B[j+2][i] = x3; B[j+3][i] = x4;
-					B[j][i+4] = x5; B[j+1][i+4] = x6; B[j+2][i+4] = x7; B[j+3][i+4] = x8;
+					B[jj][i] = x1; B[jj+1][i] = x2; B[jj+2][i] = x3; B[jj+3][i] = x4;
+					B[jj][i+4] = x5; B[jj+1][i+4] = x6; B[jj+2][i+4] = x7; B[jj+3][i+4] = x8;
 				}
 				for (j = jj; j < jj + 4; ++j)
 				{
-					x1 = A[i+4][j]; x2 = A[i+5][j]; x3 = A[i+6][j]; x4 = A[i+7][j];
-					x5 = B[j][i+4]; x6 = B[j][i+5]; x7 = B[j][i+6]; x8 = B[j][i+7];
+					x1 = A[ii+4][j]; x2 = A[ii+5][j]; x3 = A[ii+6][j]; x4 = A[ii+7][j];
+					x5 = B[j][ii+4]; x6 = B[j][ii+5]; x7 = B[j][ii+6]; x8 = B[j][ii+7];
 					
-					B[j][i+4] = x1; B[j][i+5] = x2; B[j][i+6] = x3; B[j][i+7] = x4;
-					B[j+4][i] = x5; B[j+4][i+1] = x6; B[j+4][i+2] = x7; B[j+4][i+3] = x8;
+					B[j][ii+4] = x1; B[j][ii+5] = x2; B[j][ii+6] = x3; B[j][ii+7] = x4;
+					B[j+4][ii] = x5; B[j+4][ii+1] = x6; B[j+4][ii+2] = x7; B[j+4][ii+3] = x8;
 				}
 				for (i = ii + 4; i < ii + 8; ++i)
 				{
-					x1 = A[i][j+4]; x2 = A[i][j+5]; x3 = A[i][j+6]; x4 = A[i][j+7];
-					B[j+4][i] = x1; B[j+5][i] = x2; B[j+6][i] = x3; B[j+7][i] = x4;
+					x1 = A[i][jj+4]; x2 = A[i][jj+5]; x3 = A[i][jj+6]; x4 = A[i][jj+7];
+					B[jj+4][i] = x1; B[jj+5][i] = x2; B[jj+6][i] = x3; B[jj+7][i] = x4;
 				}
 			}
 	}
     
     // optimized for N == 67 && M == 61
+    // 8-block
     else if(M == 61 && N == 67) 
     {
 		for (j = 0; j < M / 8 * 8; j += 8)
@@ -109,7 +110,7 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 				B[j+6][i] = x7;
 				B[j+7][i] = x8;
 			}
-		for (i = N / 8 * 8; i < N; ++i)
+		for (i = N / 8 * 8; i < N; ++i)  // deal with board
 			for (j = M / 8 * 8; j < M; ++j)
 			{
 				x1 = A[i][j];
