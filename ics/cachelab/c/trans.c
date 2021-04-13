@@ -22,6 +22,76 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
 {
+    int i, j, ii, jj, bsize = 8, tmp;
+    
+    // optimized for N == 32 && M == 32
+    if(M == 32 && N == 32){
+        for(ii = 0; ii < N; ii += bsize) {
+            for(jj = 0; jj < M; jj += bsize) {
+
+                if(ii == jj) 
+                {
+                    for(i = ii; i < ii + bsize; i+=1) {
+
+                        for(j = jj; j < jj + bsize; j+=1) {
+                            if(j != i) 
+                                B[j][i] = A[i][j];
+                            else if(i != 0){
+                                B[j-1][i-1] = tmp;
+                            }
+                        }
+                        tmp = A[i][i];
+                    }
+                }
+                else 
+                {
+                    for(i = ii; i < ii + bsize; i+=1) {
+                        for(j = jj; j < jj + bsize; j+=1) {
+                            B[j][i] = A[i][j];
+                        }
+                    }
+                }
+                
+            }
+        }
+        B[j-1][i-1] = tmp;
+    }
+
+    //optimized for N == 64 && M == 64
+    if(M == 64 && N == 64){
+        bsize = 4;
+    
+        for(ii = 0; ii < N; ii += bsize) {
+            for(jj = 0; jj < M; jj += bsize) {
+
+                if(ii == jj) 
+                {
+                    for(i = ii; i < ii + bsize; i+=1) {
+
+                        for(j = jj; j < jj + bsize; j+=1) {
+                            if(j != i) 
+                                B[j][i] = A[i][j];
+                            else if(i != 0){
+                                B[j-1][i-1] = tmp;
+                            }
+                        }
+                        tmp = A[i][i];
+                    }
+                }
+                else 
+                {
+                    for(i = ii; i < ii + bsize; i+=1) {
+                        for(j = jj; j < jj + bsize; j+=1) {
+                            B[j][i] = A[i][j];
+                        }
+                    }
+                }
+                
+            }
+        }
+        B[j-1][i-1] = tmp;
+    }
+
 }
 
 /* 
