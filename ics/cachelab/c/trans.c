@@ -25,10 +25,10 @@ void transpose_submit(int M, int N, int A[N][M], int B[M][N])
     int i, j, ii, jj, x1, x2, x3, x4, x5, x6, x7, x8;
     
     // optimized for N == 32 && M == 32
-    if(M == 32 && N == 32)
+    if(M == 32 && N == 32)    
     {
         for(ii = 0; ii < N; ii += 8) {
-            for(jj = 0; jj < M; jj += 8) {
+            for(jj = 0; jj < M; jj += 8) {      //divide into 8 x 8
 
                 for(i = ii; i < (ii + 8); ++i)
 				{

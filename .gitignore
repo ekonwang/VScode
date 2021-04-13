@@ -2,3 +2,4 @@
 *.exe 
 #files under .vscode
 .vscode/*
+*.pdf
