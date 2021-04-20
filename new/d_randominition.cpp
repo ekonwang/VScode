@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
-#include <chrono>
 #include <random>
+#include <chrono>
 using namespace std;
 int a[300005];
 vector<int> v[300005];
@@ -21,7 +21,7 @@ int main()
         for (int _=0;_<40;_++)
         {
             int c=a[uniform_int_distribution<int>(l,r)(rng)],f=upper_bound(v[c].begin(),v[c].end(),r)-lower_bound(v[c].begin(),v[c].end(),l);
-            cout << "c " << c << endl;
+            //cout << "c " << c << endl;
             ans=max(ans,2*f-(r-l+1));
         }
         printf("%d\n",ans);
