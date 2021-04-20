@@ -37,36 +37,44 @@ using namespace std;                                                         //*
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
 }
-void clear(queue<int>& q) {
-	queue<int> empty;
-	swap(empty, q);
-}
 //---------------------------------------------------------------------------//*
 
 
 
 const int N = 100000 + 5;
-int t, n;
+int n, a[N], limit;
+ll ans = 0, tmp, res = MAXLL;
+double j, k;
 
 void solve() {
-    cin >> t;
-    while(t--) {
-        cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
-                break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
-                break;
-        }
+    cin >> n;
+    ans = 0;
+    FOR(i, 0, n-1) cin >> a[i];
+
+    if(n > 50) {
+        FOR(i, 0, n-1)
+            ans += a[i] - 1;
+        cout << ans << endl;
+        return;
     }
+
+    sort(a, a+n);
+
+    k = (double)18 / n;
+    j = pow(10, k);
+    limit = (int)j;
+    
+    // cout << limit << endl;
+    for(int p = 1; p <= limit; p++) {
+        ans = 0;
+        tmp = 1;
+        for(int i = 0; i < n; i++) {
+            ans += abs(tmp - (ll)a[i]);
+            tmp *= p;
+        }
+        res = min(ans, res);
+    }
+    cout << res << endl;
 }
 
 int main() {

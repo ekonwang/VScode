@@ -37,44 +37,63 @@ using namespace std;                                                         //*
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
 }
+void clear(queue<int>& q) {
+	queue<int> empty;
+	swap(empty, q);
+}
 //---------------------------------------------------------------------------//*
 
 
 
-const int N = 100000 + 5;
-int n, a[N], limit;
-ll ans = 0, tmp, res = MAXLL;
-double j, k;
+const int N = 100;
+int t, a[N];
+string s;   
 
 void solve() {
-    cin >> n;
-    ans = 0;
-    FOR(i, 0, n-1) cin >> a[i];
+    cin >> t;
 
-    if(n > 50) {
-        FOR(i, 0, n-1)
-            ans += a[i] - 1;
-        cout << ans << endl;
-        return;
-    }
+    while(t--) {
+        int len, s_pos, recount = 0, num, a_pos = 0, j = 0, ans = 0;
 
-    sort(a, a+n);
-
-    k = (double)18 / n;
-    j = pow(10, k);
-    limit = (int)j;
-    
-    // cout << limit << endl;
-    for(int p = 1; p <= limit; p++) {
-        ans = 0;
-        tmp = 1;
-        for(int i = 0; i < n; i++) {
-            ans += abs(tmp - (ll)a[i]);
-            tmp *= p;
+        cin >> s;
+        len = s.length();
+        //init
+        if(s[0] == '0') { 
+            recount = 1;
+            num = 0;
+        }else {
+            recount = 0;
+            num = 1;
         }
-        res = min(ans, res);
+
+        for(int i = 1; i < len; ++i) {
+            switch (s[i])
+            {
+            case '0':
+                recount = 1;
+                if(num) a[a_pos++] = num;
+                num = 0;
+                break;
+            default:
+                num ++;
+                break;
+            }
+        }
+        if(num) {
+            a[a_pos++] = num;
+            num = 0;
+        }
+
+        sort(a, a + a_pos);
+        reverse(a, a + a_pos);
+        j = 0;
+        while(j < a_pos) {
+            ans += a[j];
+            j += 2;
+        }
+
+        cout << ans << endl;
     }
-    cout << res << endl;
 }
 
 int main() {

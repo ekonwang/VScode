@@ -46,27 +46,32 @@ void clear(queue<int>& q) {
 
 
 const int N = 100000 + 5;
-int t, n;
+ll n, a[N];
 
 void solve() {
-    cin >> t;
-    while(t--) {
-        cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
-                break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
-                break;
-        }
+    cin >> n;
+    FOR(i, 1, n) cin >> a[i];
+
+    if(n == 1) {
+        cout << 1 << ' ' << 1 << endl;
+        cout << a[1] << endl;
+        cout << 1 << ' ' << 1 << endl;
+        cout << a[1] << endl;
+        cout << 1 << ' ' << 1 << endl;
+        cout << -3 * a[1] << endl;
+        return;
     }
+
+    cout << 1 << ' ' << n-1 << endl;
+    FOR(i, 1, n-1) {
+        cout << (n-1) * a[i] << ' ';
+    }cout << endl;
+    cout << n << ' ' << n << endl;
+    cout << a[n] * (n-1) << endl;
+    cout << 1 << ' ' << n << endl;
+    FOR(i, 1, n) {
+        cout << -n * a[i] << ' ';
+    }cout << endl;
 }
 
 int main() {
