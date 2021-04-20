@@ -1,4 +1,6 @@
     #include <bits/stdc++.h>                                                     //*
+    #include <random>
+    #include <chrono>
     #define il inline                                                            //*
     #define ll long long                                                         //*
     #define INT __int64                                                          //*
@@ -52,27 +54,27 @@
     }
     //---------------------------------------------------------------------------//*
 
-
-
-const int N = 100000 + 5;
-int n;
-set<int> coprimes;
+const int N = 3e5 + 5;
+int a[N], n, q, l, r;
+vector<int> v[N];
 
 void solve() {
-    cin >> n;
-    ll r = 1;
-    FOR(i, 1, n-1) {
-        if(gcd(i, n) == 1) {
-            coprimes.insert(i);
-            r *= i;
-            r %= n;
-        }
+    cin >> n >> q;
+    FOR(i, 1, n) {
+        cin >> a[i];
+        v[a[i]].push_back(i);
     }
-    if(r != 1) coprimes.erase(r);
-    cout << coprimes.size() << endl;
-    for(auto i = coprimes.begin(); i != coprimes.end(); i++)
-        cout << *i << ' ';
-    cout << endl;
+    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    FOR(i, 1, q){
+        int res = 1;
+        cin >> l >> r;
+        FOR(j, 1, 40) {
+            int random_v = a[uniform_int_distribution<int>(l, r)(rng)], f = 
+                upper_bound(v[random_v].begin(), v[random_v].end(), r) - lower_bound(v[random_v].begin(), v[random_v].end(), l);
+            res = max(res, 2*f - (r-l+1));
+        }
+        cout << res << endl;
+    }
 }
 
 int main() {
