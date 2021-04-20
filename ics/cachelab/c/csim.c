@@ -31,7 +31,7 @@ int warm_up(long long ind, long long p);
 int evict(long long ind, long long p);
 void run();
 
-void test_file_stream() ;
+void test_file_stream();
 
 int main(int argc, char *argv[]){
 
