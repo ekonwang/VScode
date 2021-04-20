@@ -43,29 +43,36 @@ void clear(queue<int>& q) {
 }
 //---------------------------------------------------------------------------//*
 
+const int N = 1e5 + 5;
+int t, n, sum[N];
+ll ans;
+string s;
+map<int, ll> mp;
 
-
-const int N = 100000 + 5;
-int t, n;
 
 void solve() {
     cin >> t;
+
     while(t--) {
+        ans = 0;
         cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
-                break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
-                break;
+        cin >> s;
+        mp = map<int, ll>();
+
+        sum[0] = 0;
+        mp[sum[0] - 0]++;
+        for(int i = 1; i <= n; i++) {
+            sum[i] = sum[i-1] + s[i-1] - '0';
+            mp[sum[i] - i] ++;
         }
+
+        for(auto elem: mp) {
+            ll tmp = mp[elem.first];
+            //cout << "tmp " << tmp << endl; 
+            ans += (tmp - 1) * tmp / 2;
+        }
+
+        cout << ans << endl;
     }
 }
 

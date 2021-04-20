@@ -12,6 +12,15 @@ const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
 ll lcd(ll a , ll b){return a * b / gcd(a,b);}                                //*
+ll phi(ll a) {                                                               //*
+    ll tmp = a, ans = a, d = 2;                                              //*
+    while(d * d <= tmp) {                                                    //*
+        ll cnt = 0;                                                          //*
+        while(tmp % d == 0) {tmp /= d; cnt ++;} if(cnt) ans -= ans / d; d++;
+    }
+    if(tmp > 1) ans -= ans/tmp; 
+    return ans;
+}
 inline ll read(){                                                            //*
     char ch = getchar(); ll x = 0, f = 1;                                    //*
     while(ch < '0' || ch > '9') {if(ch == '-') f = -1; ch = getchar();}      //*
@@ -37,53 +46,78 @@ using namespace std;                                                         //*
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
 }
+void clear(queue<int>& q) {
+	queue<int> empty;
+	swap(empty, q);
+}
 //---------------------------------------------------------------------------//*
 
 
 
-const int N = 100 + 5;
-int n, a[N], test[N], tot[N], tot2[N], t, f;
+const int N = 100000 + 5;
+int a[N], b[N], mi, ma, d, n, x, t;
+map<int ,int> mp;
 
-bool same(int n, int first[], int second[]){
-    FOR(i, 1, n) if(first[i] != second[i]) return false;
-    return true;
-}
+void pre() {
 
-void sum() {
-    FOR(i, 1, n-1)
-        tot2[i] = test[i] + test[i+1];
-    sort(tot2 + 1, tot2 + n);
-}
+    int i = 0, cnt = 0, len;
+    string s;
 
-bool valid() {
-    if(same(n, a, test)) return false;
-    if(same(n-1, tot, tot2)) return true;
-    return false;
-}
+    mp = map<int, int>();
+    cin >> n >> x;
+    cin >> s;
 
-void print() {
-    FOR(i, 1, n) cout << test[i] << ' '; cout << endl;
+    mi = MAXINT;
+    ma = -MAXINT;
+    len = s.length();
+
+    while(i < len) {
+        switch (s[i])
+        {
+        case '0':
+            cnt++;
+            /* code */
+            break;
+        default:
+            cnt--;
+        }
+        mp[cnt]++;
+        ma = max(cnt, ma);
+        mi = min(cnt, mi);
+        i++;
+    }
+    d = cnt;    
 }
 
 void solve() {
     cin >> t;
+    while(t--) {
+        ll res = 0;
 
-    while(t --) {
-        f = 0;
-        cin >> n;
-
-        FOR(i, 1, n) cin >> a[i];
-        FOR(i, 1, n) test[i] = i;
-        FOR(i, 1, n-1) tot[i] = a[i] + a[i+1];
-        sort(tot + 1, tot + n);
-
-        do {
-            sum();
-            if(valid()) { print(); break; }
-        }while(next_permutation(test + 1, test + n + 1));
-
-    }
-
+        pre();
+        if(!x) res++;
+        if(!d && x >= mi && x <= ma) {
+            res = -1;
+        }else if( (d >= 0 && x < mi)|| (d <= 0 && x > ma) ) {}
+        else if(d > 0){
+            if(x > ma) {
+                x -= d*((x-ma-1)/d + 1);
+            }
+            while(x >= mi) {
+                res += mp[x];
+                x -= d;
+            }
+        }else {
+            if(x < mi) {
+                x += d*((mi-x-1)/d + 1);
+            }
+            while(x <= ma) {
+                res += mp[x];
+                x -= d;
+            }
+        }
+        cout << res << endl;
+    } 
 }
 
 int main() {

@@ -12,6 +12,15 @@ const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
 ll lcd(ll a , ll b){return a * b / gcd(a,b);}                                //*
+ll phi(ll a) {                                                               //*
+    ll tmp = a, ans = a, d = 2;                                              //*
+    while(d * d <= tmp) {                                                    //*
+        ll cnt = 0;                                                          //*
+        while(tmp % d == 0) {tmp /= d; cnt ++;} if(cnt) ans -= ans / d; d++;
+    }
+    if(tmp > 1) ans -= ans/tmp; 
+    return ans;
+}
 inline ll read(){                                                            //*
     char ch = getchar(); ll x = 0, f = 1;                                    //*
     while(ch < '0' || ch > '9') {if(ch == '-') f = -1; ch = getchar();}      //*
@@ -43,30 +52,80 @@ void clear(queue<int>& q) {
 }
 //---------------------------------------------------------------------------//*
 
-
+//没有充分理解题意
+//debug上浪费了太长的时间
+//边界情况没有处理好 （N的取值，string的越界访问等）
 
 const int N = 100000 + 5;
-int t, n;
+int **pre, ls, lt;
+string s, t;
+
+bool valid() {
+    FOR(i, 0, lt-1){
+        //std::cout << "valid i " << i << endl; 
+        int tp = t[i] - 'a';
+        if(pre[tp][0] < 0) return 0;
+    }
+    return 1;
+}
+
+void prepare() {
+    cin >> s >> t;
+    ls = s.length();
+    lt = t.length();
+    FOR(i, 0, 25)FOR(j, 0, N-1) pre[i][j] = -1;
+    //std::cout << "h" << endl;
+    FOR(i, 0, 25) REP(j, ls-1, 0) {
+        int tp = s[j] - 'a';
+        if(tp == i) pre[i][j] = j;
+        else pre[i][j] = pre[i][j+1];
+    }
+    /* FOR(i, 0, 25) {
+        int j = 0;
+        while(pre[i][j] != -1) std::cout << pre[i][j++] << ' ';
+        std::cout << endl;
+    }  */
+}
 
 void solve() {
-    cin >> t;
-    while(t--) {
-        cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
-                break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
-                break;
-        }
+    int tq;
+    cin >> tq;
+    
+    pre = new int*[26];
+    FOR(i, 0, 25){
+        pre[i] = new int[N];
     }
+
+    while(tq--) {
+        //p is pos of t
+        //tp is char
+        //i is pos of s
+        int res = 0, p = 0, tp, i = 0;
+        prepare();
+        if(!valid()) {
+            std::cout << -1 << endl;
+            continue;
+        }
+        p = 0;
+        while(1) {
+            tp = t[p]-'a';
+            while((i = pre[tp][i]) >= 0 && p < lt) {
+                //std::cout << "i " << i << endl;
+                p++;
+                i++;
+                //std::cout << "p lt " << p << ' ' << lt << endl;
+                if(p < lt) tp = t[p] - 'a';
+            }
+            res ++;
+            //cout << "res " << res << endl; 
+            i = 0;
+            if(p >= lt) break;
+        }
+        std::cout << res << endl;
+    }
+    FOR(i, 0, 25)
+        delete []pre[i];
+    delete []pre;
 }
 
 int main() {

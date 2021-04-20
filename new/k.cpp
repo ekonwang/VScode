@@ -12,6 +12,15 @@ const double E = exp(1.0);                                                   //*
 const double PI = acos(-1.0);                                                //*
 ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
 ll lcd(ll a , ll b){return a * b / gcd(a,b);}                                //*
+ll phi(ll a) {                                                               //*
+    ll tmp = a, ans = a, d = 2;                                              //*
+    while(d * d <= tmp) {                                                    //*
+        ll cnt = 0;                                                          //*
+        while(tmp % d == 0) {tmp /= d; cnt ++;} if(cnt) ans -= ans / d; d++;
+    }
+    if(tmp > 1) ans -= (ans/tmp); 
+    return ans;
+}
 inline ll read(){                                                            //*
     char ch = getchar(); ll x = 0, f = 1;                                    //*
     while(ch < '0' || ch > '9') {if(ch == '-') f = -1; ch = getchar();}      //*
@@ -46,26 +55,20 @@ void clear(queue<int>& q) {
 
 
 const int N = 100000 + 5;
-int t, n;
+ll p, a, m, pa, pm, t, k;
 
 void solve() {
     cin >> t;
+
     while(t--) {
-        cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
-                break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
-                break;
-        }
+        int res = 0;
+
+        cin >> a >> m;
+        p = gcd(a, m);
+        //cout << " prime " << p << endl;
+        pm = m/p;
+
+        cout << phi(pm) << endl;
     }
 }
 

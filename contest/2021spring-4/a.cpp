@@ -37,35 +37,32 @@ using namespace std;                                                         //*
 int cmp(pair<int,int>a,pair<int,int>b){
     return a.first < b.first || (a.first == b.first && a.second < b.second);
 }
-void clear(queue<int>& q) {
-	queue<int> empty;
-	swap(empty, q);
-}
 //---------------------------------------------------------------------------//*
 
 
 
-const int N = 100000 + 5;
-int t, n;
-
+const int N = 1000+5;
+string s;
+int t, num[26], n, l, v = 1;
 void solve() {
     cin >> t;
     while(t--) {
+        v = 1;
         cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
-                break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
-                break;
+        memset(num, 0, sizeof(num));
+
+        for(int k = 0; k < n; ++k){
+            cin >> s;
+            l = s.length();
+            for(int i = 0; i < l; i++) {
+                num[s[i] - 'a'] ++;
+            }
         }
+        for(int i = 0; i < 26; i++) {
+            if(num[i] % n) v = 0; 
+        }
+        if(v) cout << "YES" << endl;
+        else cout << "NO" << endl;
     }
 }
 

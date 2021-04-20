@@ -46,25 +46,43 @@ void clear(queue<int>& q) {
 
 
 const int N = 100000 + 5;
-int t, n;
+int t, n, v, pending = 0;;
+priority_queue<int> q;
+
+bool ifvalid(){
+    int tmp;
+
+    if(!q.empty()) {
+        tmp = q.top() - 1;
+        q.pop();
+        if(pending) q.push(pending);
+        pending = tmp;
+        return 1;
+    }
+    return 0;
+}
 
 void solve() {
     cin >> t;
+    
     while(t--) {
+        q = priority_queue<int> ();
+        int v, pending = 0;
+
         cin >> n;
-        
-        switch(n%2) {
-            case 0:
-                FOR(i, 1, n/2) 
-                    cout << 1;
-                cout << endl;
+        FOR(i, 1, n) {
+            cin >> v;
+            q.push(v);
+        }
+        while(1) {
+            if(!ifvalid()) {
+                cout << "HL" << endl;
                 break;
-            default:
-                cout << 7;
-                FOR(i, 1, (n-3)/2)
-                    cout << 1;
-                cout << endl;
+            }
+            if(!ifvalid()) {
+                cout << 'T' << endl;
                 break;
+            }
         }
     }
 }

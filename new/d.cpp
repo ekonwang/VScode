@@ -52,16 +52,42 @@
     }
     //---------------------------------------------------------------------------//*
 
+    //更新过程理解有问题
 
+    const int N = 200 + 2;
+    int R, G, B, dp[N][N][N], a[N], b[N], c[N];
 
-const int N = 100000 + 5;
+    int cmp1(int x, int y) {
+        return x > y;
+    }
 
-void solve() {
-    
-}
+    void solve() {
+        int rs = 0;
+        memset(dp, 0, sizeof(dp));
+        cin >> R >> G >> B;
+        FOR(i, 1, R) cin >> a[i];
+        FOR(i, 1, G) cin >> b[i];
+        FOR(i, 1, B) cin >> c[i];
+        sort(a+1, a+R+1, cmp1); 
+        sort(b+1, b+G+1, cmp1);
+        sort(c+1, c+B+1, cmp1);
+        FOR(i, 0, R)FOR(j, 0, G)FOR(k, 0, B) {
+            //if((i + j + k) % 2) continue;
+            //cout << i << ' ' << j << ' ' << k << ' ' << dp[i][j][k] << ' ';
+            if(i-1 >= 0 && j-1 >= 0)
+                dp[i][j][k] = max(dp[i][j][k], dp[i-1][j-1][k] + a[i]*b[j]);
+            if(i-1 >= 0 && k-1 >= 0)
+                dp[i][j][k] = max(dp[i][j][k], dp[i-1][j][k-1] + a[i]*c[k]);
+            if(j-1 >= 0 && k-1 >= 0)
+                dp[i][j][k] = max(dp[i][j][k], dp[i][j-1][k-1] + b[j]*c[k]);
+            //cout << dp[i][j][k] << endl;
+            rs = max(rs, dp[i][j][k]);
+        }
+        cout << rs << endl;
+    }
 
-int main() {
-    init_cin();
-    solve();
-    return 0;
-}
+    int main() {
+        init_cin();
+        solve();
+        return 0;
+    }
