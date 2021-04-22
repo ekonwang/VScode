@@ -27,6 +27,15 @@
         while('0' <= ch && ch <= '9') {x = x * 10 + ch - '0'; ch = getchar();}   //*
         return x * f;                                                            //*
     }                                                                            //*
+    inline void write(ll x)                                                      //*
+    {                                                                            //*
+        if(x<0) {                                                                //*
+            putchar('-');                                                        //*
+            x = -x;                                                              //*
+        }                                                                        //*
+        if(x>9) write(x / 10);                                                   //*
+        putchar(x % 10 + '0');                                                   //*
+    }                                                                            //*
     void init_cin(){                                                             //*
     std::ios::sync_with_stdio(false);                                            //*
     std::cin.tie(nullptr);                                                       //*
@@ -37,14 +46,34 @@
     int cmp(pair<int,int>a,pair<int,int>b){
         return a.first < b.first || (a.first == b.first && a.second < b.second);
     }
+    void clear(queue<int>& q) {
+        queue<int> empty;
+        swap(empty, q);
+    }
     //---------------------------------------------------------------------------//*
 
 
 
-const int N = 100000 + 5;
+const int N = 100 + 5;
+int t, n, k, a[N];
 
 void solve() {
-    
+    cin >> t;
+    while(t--) {
+        cin >> n >> k;
+        FOR(i, 1, n)
+            cin >> a[i];
+        int sum = 0;
+        for(int i = 1; i < n && sum < k; ++i) {
+            int tmp = min(k-sum, a[i]);
+            a[i] -= tmp;
+            sum += tmp;
+        }
+        a[n] += sum;
+        FOR(i, 1, n) 
+            cout << a[i] << ' ';
+        cout << endl;
+    }
 }
 
 int main() {

@@ -5,6 +5,7 @@ using namespace std;
 
 const int MAXINT = 0x7fffffff;
 const int MAXTIMES = 4e7; 
+const int N = 2e3;
 
 typedef long long ll;
 typedef vector<int> vi;
@@ -15,32 +16,20 @@ clock_t c_s, c_e;
 
 int main(){
     vi v;
-    int l = 0, r = MAXINT, *a, *b;
-
-    a = new int[MAXTIMES];
-    b = new int[MAXTIMES];
-    mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    for(int i = 0; i < N; i++)
+        v.push_back(i);
+    for(int i = 0; i < N; i++)
+        cout << v[i] << ' ';
+    
+    /* mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
     c_s = my_clock();
     for(int i = 0; i < MAXTIMES; ++i) 
         a[i] = uniform_int_distribution<int>(l, r)(rng);
     c_e = my_clock();
-    cout << "init time : " << c_e - c_s << endl;
+    cout << "init time : " << c_e - c_s << endl; */
 
-    c_s = my_clock();
-    for(int i = 0; i < MAXTIMES; ++i)
-        b[i] = a[i];
-    c_e = my_clock();
-    cout << "test #1: " << c_e - c_s << endl;
 
-    c_s = my_clock();
-    for(int i = 0; i < MAXTIMES; ++i)
-        v.push_back(a[i]);
-    c_e = my_clock();
-    cout << "test #2: " << c_e - c_s << endl;
-
-    delete []a;
-    delete []b;
 
     exit(0);
 }

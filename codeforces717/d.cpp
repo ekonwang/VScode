@@ -5,6 +5,10 @@
     #define usn unsigned                                                         //*
     #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
     #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
+    typedef vector<int> vi;
+    typedef struct{
+        int l, r, index;
+    }node;
     ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
     int const MAXINT = 0x7fffffff;                                               //*
     const int INF = 0x3f3f3f3f;                                                  //*
@@ -27,6 +31,15 @@
         while('0' <= ch && ch <= '9') {x = x * 10 + ch - '0'; ch = getchar();}   //*
         return x * f;                                                            //*
     }                                                                            //*
+    inline void write(ll x)                                                      //*
+    {                                                                            //*
+        if(x<0) {                                                                //*
+            putchar('-');                                                        //*
+            x = -x;                                                              //*
+        }                                                                        //*
+        if(x>9) write(x / 10);                                                   //*
+        putchar(x % 10 + '0');                                                   //*
+    }                                                                            //*
     void init_cin(){                                                             //*
     std::ios::sync_with_stdio(false);                                            //*
     std::cin.tie(nullptr);                                                       //*
@@ -34,18 +47,19 @@
     }                                                                            //*
     using namespace std;                                                         //*
 
-    int cmp(pair<int,int>a,pair<int,int>b){
+    int cmp1(pair<int,int>a,pair<int,int>b){
         return a.first < b.first || (a.first == b.first && a.second < b.second);
+    }
+    int cmp(node a, node b){
+        return a.l < b.r || (a.l == b.r && a.l < b.r);
+    }
+    void clear(queue<int>& q) {
+        queue<int> empty;
+        swap(empty, q);
     }
     //---------------------------------------------------------------------------//*
 
 
-
-const int N = 100000 + 5;
-
-void solve() {
-    
-}
 
 int main() {
     init_cin();
