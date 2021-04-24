@@ -16,11 +16,11 @@ clock_t c_s, c_e;
 
 int main(){
     vi v;
-    for(int i = 0; i < N; i++)
+    /* for(int i = 0; i < N; i++)
         v.push_back(i);
     for(int i = 0; i < N; i++)
-        cout << v[i] << ' ';
-    
+        cout << v[i] << ' '; */
+
     /* mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
     c_s = my_clock();

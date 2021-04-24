@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>                                                     //*
 #define FOR(i,a,b) for(int (i) = (a); i <= (b); ++i)                         //*
-#define FORN(i,n) for(int (i) = (0); i < n; ++i)
 #define REP(i,a,b) for(int (i) = (a); i >= (b); --i)                         //*
 using namespace std;                                                         //*
 typedef long long ll;
@@ -30,10 +29,31 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
+const int N = 2e5 + 5;
+int a[N], v;
+ll res, tres, n;
 
 void solve() {
-
+    cin >> n;
+    for(int i = 1; i <= n; i++){
+        a[i] = rand();
+        cout << a[i] << ' ';
+    }cout << endl;
+    clock_t b, e;
+    b = clock();
+    tres = (n+1) * n/2;
+    FOR(i, 1, n){
+        //cin >> v;
+        if(a[i] < 0) a[i] = 1;
+    } 
+    FOR(i, 1, n) {
+        int tmp = 0;
+        FOR(j, i, n){
+            tmp = tmp ^ a[j];  //很多时候就是低级错误， 太容易了， 计算机不可能出错的
+            if(tmp) res ++;
+        }
+    }
+    cout << res << ' ' << tres - res << endl;
 }
 
 int main() {

@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>                                                     //*
 #define FOR(i,a,b) for(int (i) = (a); i <= (b); ++i)                         //*
-#define FORN(i,n) for(int (i) = (0); i < n; ++i)
 #define REP(i,a,b) for(int (i) = (a); i >= (b); --i)                         //*
 using namespace std;                                                         //*
 typedef long long ll;
@@ -30,7 +29,8 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
+const int N = 1e9 + 2;
+int a[N], p[N];
 
 void solve() {
 

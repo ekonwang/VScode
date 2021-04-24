@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>                                                     //*
 #define FOR(i,a,b) for(int (i) = (a); i <= (b); ++i)                         //*
-#define FORN(i,n) for(int (i) = (0); i < n; ++i)
 #define REP(i,a,b) for(int (i) = (a); i >= (b); --i)                         //*
 using namespace std;                                                         //*
 typedef long long ll;
@@ -30,10 +29,43 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
+const int N = 3e5 + 5, M = 2e3;
+int n, a[N], ab[N], b[M], bz, q; 
 
 void solve() {
-
+    int x, y, z, bn;
+    cin >> n;
+    bz = sqrt(n);
+    int bmx = n/bz, bmi = 1/bz;
+    FOR(i, 1, n){
+        cin >> a[i];
+        ab[i] = i/bz;
+    }
+    cin >> q;
+    while(q--){
+        cin >> x;
+        if(x == 1){
+            int start, end;
+            cin >> y >> z;
+            bn = y/bz;
+            start = bn * bz;
+            end = bn * bz + bz - 1;
+            FOR(i, start, end) {
+                a[i] = max(a[i], b[bn]);
+            }
+            a[y]=z;
+            b[bn] = 0;
+        }else{
+            cin >> z;
+            FOR(i, bmi, bmx){
+                b[i] = max(z, b[i]); 
+            }
+        }
+    }
+    FOR(i, 1, n){
+        int tp = i/bz;
+        cout << max(a[i], b[tp]) << ' ';
+    }
 }
 
 int main() {

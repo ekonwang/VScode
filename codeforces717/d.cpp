@@ -32,59 +32,46 @@
         while(ch < '0' || ch > '9') {if(ch == '-') f = -1; ch = getchar();}      //*
         while('0' <= ch && ch <= '9') {x = x * 10 + ch - '0'; ch = getchar();}   //*
         return x * f;                                                            //*
-    }                                                                            //*
-    inline void write(ll x)                                                      //*
-    {                                                                            //*
-        if(x<0) {                                                                //*
-            putchar('-');                                                        //*
-            x = -x;                                                              //*
-        }                                                                        //*
-        if(x>9) write(x / 10);                                                   //*
-        putchar(x % 10 + '0');                                                   //*
-    }                                                                            //*
+    }                                                                            //*                                                                         //*
     void init_cin(){                                                             //*
     std::ios::sync_with_stdio(false);                                            //*
     std::cin.tie(nullptr);                                                       //*
     std::cout.tie(nullptr);                                                      //*
     }                                                                            //*
-
-    int cmp1(pair<int,int>a,pair<int,int>b){
-        return a.first < b.first || (a.first == b.first && a.second < b.second);
-    }
-    int cmp(node a, node b){
-        return a.l < b.r || (a.l == b.r && a.l < b.r);
-    }
-    void clear(queue<int>& q) {
-        queue<int> empty;
-        swap(empty, q);
-    }
     //---------------------------------------------------------------------------//*
 
-const int N = 1e5 + 2;
-int a[N], go[N], dp[20][N], n, q, l, r, pre[20], isp[N];
-vi g[N];
 
+
+
+
+
+
+
+
+const int N = 1e5 + 1;
+int a[N], go[N], dp[20][N], n, q, l, r, isp[N], recent[N];
+vi g[N];
 void solve(){
-    for (int i = 2; i <= 100000; i++) {
-        if (isp[i]) continue;
-        for (int j = i; j <= 100000; j += i) {
-            g[j].push_back(i);
-            isp[j] = 1;
+    /* 这个计算prime的算法真快啊 */
+    for(int i = 2; i < N; i++){   // 从2开始 
+        if(isp[i])
+            continue;
+        else{
+            for(int j = i; j < N; j+=i){
+                isp[j] = 1;
+                g[j].push_back(i);
+            }
         }
     }
-
-    pre[0] = 1;
-    FOR(i, 1, 19)
-        pre[i] = pre[i-1] << 1;
     cin >> n >> q;
     FOR(i, 1, n)
         cin >> a[i];
-    go[n] = n+1;
-    REP(i, n-1, 1){
-        int j;
-        for(j = i+1; j <= go[i+1] && j <= n; j++){
-            if(gcd(a[i], a[j]) != 1)
-                break;
+    go[n+1] = n+1;
+    REP(i, n, 1){
+        int j = n+1;
+        for(int elem: g[a[i]]) {   // g[n+1] 初始化
+            j = recent[elem] ? min(j, recent[elem]) : j; 
+            recent[elem] = i; 
         }
         go[i] = min(go[i+1], j);
     }
@@ -93,21 +80,21 @@ void solve(){
     FOR(i, 1, 19){
         FOR(j, 1, n){
             dp[i][j] = dp[i-1][j] <= n? dp[i-1][dp[i-1][j]]: n+1;
-        }
+            //cout << dp[i][j] << ' ';
+        }//cout << endl;
     }
     while(q--){
         int res = 0, i;
         cin >> l >> r;
         for(i = 17; i >= 0; i--){  //i的更新有一个问题
             if(dp[i][l] <= r){
-                res += pre[i];
+                res += 1 << i;
                 l = dp[i][l];
             }
         }
         cout << res + 1 << endl;
     }
 }
-
 int main() {
     init_cin();
     solve();

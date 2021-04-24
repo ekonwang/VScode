@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>                                                     //*
 #define FOR(i,a,b) for(int (i) = (a); i <= (b); ++i)                         //*
-#define FORN(i,n) for(int (i) = (0); i < n; ++i)
 #define REP(i,a,b) for(int (i) = (a); i >= (b); --i)                         //*
 using namespace std;                                                         //*
 typedef long long ll;
@@ -30,10 +29,43 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
+const ll N = 2e5 + 5;
+vll L, R, neg;
+ll a[N], n, v;
 
 void solve() {
+    int len;
+    ll res, lres;
+    cin >> n;
+    FOR(i, 0, n-1){
+        cin >> v;
+        if(v < 0) neg.push_back(i);
+    }
+    len = neg.size();
 
+    if(len == 0) {
+        res = (n+1) * (n) / 2;
+        cout << res << ' ' << 0 << endl;
+    }
+    else if(len == 1) {
+        int pos = neg[0];
+        res = (n - pos) * (pos + 1);
+        lres = (n + 1)  * (n) / 2 - res;
+        cout << lres << ' ' << res << endl;
+    }else{
+        L.push_back(0);
+        R.push_back(neg[1]-1);
+        FOR(i, 1, len-2){
+            L.push_back(neg[i-1]+1);
+            R.push_back(neg[i+1]-1);
+        }
+        L.push_back(neg[len-2]+1);
+        R.push_back(n-1);
+        for(int k = 0; k < len; k+=2) {
+            for(int r = k; r < len; r++) {
+            }
+        }
+    }
 }
 
 int main() {

@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>                                                     //*
 #define FOR(i,a,b) for(int (i) = (a); i <= (b); ++i)                         //*
-#define FORN(i,n) for(int (i) = (0); i < n; ++i)
 #define REP(i,a,b) for(int (i) = (a); i >= (b); --i)                         //*
 using namespace std;                                                         //*
 typedef long long ll;
@@ -31,9 +30,42 @@ std::cout.tie(nullptr);                                                      //*
 //---------------------------------------------------------------------------//*
 
 const int N = 100000 + 5;
+string s, t;
+vi va, vb;
+int n;
 
 void solve() {
-
+    cin >> n;
+    cin >> s >> t;
+    FOR(i, 0, n-1) {
+        if(s[i] == t[i]) continue;
+        if(s[i] == 'a') va.push_back(i + 1);
+        else vb.push_back(i + 1);
+    }
+    if( (va.size() + vb.size()) % 2) {
+        cout << -1 << endl;
+        return;
+    }
+    int tpa = va.size(), tpb = vb.size();
+    cout << ((tpa + 1) >> 1) + ((tpb + 1) >>   1) << endl; 
+    if(tpa % 2==0){
+        for(int i = 0; i < tpa; i += 2){
+            cout << va[i] << ' ' << va[i+1] << endl;
+        }
+        for(int i = 0; i < tpb; i += 2){
+            cout << vb[i] << ' ' << vb[i+1] << endl;
+        }
+    }else{
+        for(int i = 0; i < tpa-1; i+= 2){
+            cout << va[i] << ' ' << va[i+1] << endl;
+        }
+        cout << va[tpa-1] << ' ' << va[tpa-1] << endl;
+        cout << va[tpa-1] << ' ' << vb[0] << endl;
+        for(int i = 1; i < tpb; i+=2){
+            cout << vb[i] << ' ' << vb[i+1] << endl;
+        }
+    }
+    
 }
 
 int main() {
