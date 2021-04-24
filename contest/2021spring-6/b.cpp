@@ -28,44 +28,30 @@ std::cin.tie(nullptr);                                                       //*
 std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
-
+// 双状态 、 匹配问题
 const ll N = 2e5 + 5;
 vll L, R, neg;
-ll a[N], n, v;
+ll a[N], S[N], n, v, sum0, sum1;
 
 void solve() {
     int len;
     ll res, lres;
     cin >> n;
-    FOR(i, 0, n-1){
+    FOR(i, 1, n){
         cin >> v;
-        if(v < 0) neg.push_back(i);
+        if(v < 0) a[i] = 1;
     }
-    len = neg.size();
-
-    if(len == 0) {
-        res = (n+1) * (n) / 2;
-        cout << res << ' ' << 0 << endl;
+    S[0] = 0;
+    FOR(i, 1, n){
+        S[i] = S[i-1] ^ a[i];
     }
-    else if(len == 1) {
-        int pos = neg[0];
-        res = (n - pos) * (pos + 1);
-        lres = (n + 1)  * (n) / 2 - res;
-        cout << lres << ' ' << res << endl;
-    }else{
-        L.push_back(0);
-        R.push_back(neg[1]-1);
-        FOR(i, 1, len-2){
-            L.push_back(neg[i-1]+1);
-            R.push_back(neg[i+1]-1);
-        }
-        L.push_back(neg[len-2]+1);
-        R.push_back(n-1);
-        for(int k = 0; k < len; k+=2) {
-            for(int r = k; r < len; r++) {
-            }
-        }
+    FOR(i, 0, n){
+        if(S[i]) sum1 ++;
+        else sum0 ++;
     }
+    lres = sum0 * sum1;
+    res = 1ll*(n + 1)*n/2 - lres;
+    cout << lres << ' ' << res << endl;
 }
 
 int main() {
