@@ -5,16 +5,18 @@
     #define usn unsigned                                                         //*
     #define FOR(i,a,b) for(int i = (a), (i##i)=(b); i<=(i##i); ++i)              //*
     #define REP(i,a,b) for(int i = (a), (i##i)=(b); i>=(i##i); --i)              //*
-    typedef vector<int> vi;
+    using namespace std;
     typedef struct{
         int l, r, index;
     }node;
+    typedef vector<int> vi;
     ll const MAXLL = 0x7fffffffffffffffLL;                                       //*
     int const MAXINT = 0x7fffffff;                                               //*
     const int INF = 0x3f3f3f3f;                                                  //*
     const double E = exp(1.0);                                                   //*
     const double PI = acos(-1.0);                                                //*
     ll gcd(ll a,ll b){while(b^=a^=b^=a%=b);return a;}                            //*
+    int gcd(int a,int b){while(b^=a^=b^=a%=b);return a;} 
     ll lcd(ll a , ll b){return a * b / gcd(a,b);}                                //*
     ll phi(ll a) {                                                               //*
         ll tmp = a, ans = a, d = 2;                                              //*
@@ -45,7 +47,6 @@
     std::cin.tie(nullptr);                                                       //*
     std::cout.tie(nullptr);                                                      //*
     }                                                                            //*
-    using namespace std;                                                         //*
 
     int cmp1(pair<int,int>a,pair<int,int>b){
         return a.first < b.first || (a.first == b.first && a.second < b.second);
@@ -59,7 +60,53 @@
     }
     //---------------------------------------------------------------------------//*
 
+const int N = 1e5 + 2;
+int a[N], go[N], dp[20][N], n, q, l, r, pre[20], isp[N];
+vi g[N];
 
+void solve(){
+    for (int i = 2; i <= 100000; i++) {
+        if (isp[i]) continue;
+        for (int j = i; j <= 100000; j += i) {
+            g[j].push_back(i);
+            isp[j] = 1;
+        }
+    }
+
+    pre[0] = 1;
+    FOR(i, 1, 19)
+        pre[i] = pre[i-1] << 1;
+    cin >> n >> q;
+    FOR(i, 1, n)
+        cin >> a[i];
+    go[n] = n+1;
+    REP(i, n-1, 1){
+        int j;
+        for(j = i+1; j <= go[i+1] && j <= n; j++){
+            if(gcd(a[i], a[j]) != 1)
+                break;
+        }
+        go[i] = min(go[i+1], j);
+    }
+    FOR(i, 1, n)
+        dp[0][i] = go[i];
+    FOR(i, 1, 19){
+        FOR(j, 1, n){
+            dp[i][j] = dp[i-1][j] <= n? dp[i-1][dp[i-1][j]]: n+1;
+        }
+    }
+    while(q--){
+        int res = 0, i;
+        cin >> l >> r;
+        for(i = 17; i >= 0; i--){  //i的更新有一个问题
+            if(dp[i][l] <= r){
+                res += pre[i];
+                l = dp[i][l];
+            }
+        }
+        cout << res + 1 << endl;
+    }
+}
 
 int main() {
     init_cin();
