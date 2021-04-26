@@ -20,9 +20,7 @@ int main(){
         v.push_back(i);
     for(int i = 0; i < N; i++)
         cout << v[i] << ' '; */
-    int a = 23, b= 45;
-    a ^= b ^= a;
-    cout << b << ' ' << a;
+
 
     /* mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
