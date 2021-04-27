@@ -1,3 +1,7 @@
+/*
+ * Run under Linux terminal (Ubuntu 18.04)
+ * ics assignment week 8.
+*/
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
