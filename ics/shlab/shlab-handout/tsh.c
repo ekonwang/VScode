@@ -130,7 +130,6 @@ int main(int argc, char **argv)
 
     /* Execute the shell's read/eval loop */
     while (1) {
-
 	/* Read command line */
 	if (emit_prompt) {
 	    printf("%s", prompt);
@@ -294,14 +293,16 @@ void do_bgfg(char **argv)
     if(argv_one[0] == '%'){
         jid = atoi(&argv_one[1]);
         job = getjobjid(jobs, jid);
+        if(job == NULL){
+            printf("%s: No such job", argv[1]);
+        }
     }
     else{
         pid = (pid_t)atoi(argv_one);
         job = getjobpid(jobs, pid);
-    }
-    if(job == NULL){
-        printf("No such process");
-        return;
+        if(job == NULL){
+            printf("%s: No such process", argv[1]);
+        }
     }
     pid = job -> pid;
 
@@ -363,9 +364,12 @@ void sigchld_handler(int sig)
 void sigint_handler(int sig) 
 {
     pid_t pid;
+    job_t job;
     pid = fgpid(jobs);
     if(pid){
+        job = getjobpid(pid);
         kill(-pid, SIGINT);
+        printf("Job [%d] (%d) terminated by signal %d\n", jobs[i].jid, jobs[i].pid, SIGINT);
     }
     return;
 }
@@ -384,6 +388,7 @@ void sigtstp_handler(int sig)
         job = getjobpid(jobs, pid);
         kill(-pid, SIGSTOP);
         job -> state = ST;
+        printf("Job [%d] (%d) stopped by signal %d\n", jobs[i].jid, jobs[i].pid, SIGSTOP);
     }
     return;
 }
