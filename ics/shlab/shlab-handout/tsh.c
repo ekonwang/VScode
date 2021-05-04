@@ -305,15 +305,10 @@ void do_bgfg(char **argv)
     }
     pid = job -> pid;
 
-    if(!strcmp(argv[0], "bg")){
-        if(job -> status == ST){
-            kill(-pid, SIGCONT);
-        }
+    if(job -> status == ST){
+        kill(-pid, SIGCONT);
     }
-    else{
-        if(job -> status == ST){
-            kill(-pid, SIGCONT);
-        }
+    if(!strcmp(argv[0], "fg")){
         waitfg(pid);
     }
     return;
@@ -347,7 +342,7 @@ void sigchld_handler(int sig)
     int *status;
     pid_t pid;
     int detected;
-    pid = waitpid(-1, status, WNOHANG|WUNTRACED);
+    pid = waitpid(-1, status, 0);
     if(pid){
         if(WIFEXITED(status)){
             deletejob(jobs, pid);
