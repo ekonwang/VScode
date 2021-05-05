@@ -345,23 +345,42 @@ void waitfg(pid_t pid)
  *     currently running children to terminate.  
  */
 void sigchld_handler(int sig) 
-{   
-    int status;
+{
+    int olderrno = errno;   // 保存旧errno
     pid_t pid;
-    int detected;
-    pid = waitpid(-1, &status, WNOHANG);
-    if(pid >= 0 && ( WIFEXITED(status) || WIFSIGNALED(status) )){
-        if(WIFEXITED(status)){
+    int status;
+    sigset_t mask_all, prev; 
+    
+    sigfillset(&mask_all);  // 设置全阻塞
+    while((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0)
+    {
+        // WNOHANG | WUNTRACED 是立即返回
+        // 用WIFEXITED(status)，WIFSIGNALED(status)，WIFSTOPPED(status)等来补获终止或者
+        // 被停止的子进程的退出状态。
+    	if (WIFEXITED(status))  // 正常退出 delete
+    	{
+    		sigprocmask(SIG_BLOCK, &mask_all, &prev);
+    		deletejob(jobs, pid);
+    		sigprocmask(SIG_SETMASK, &prev, NULL);
+    	}
+    	else if (WIFSIGNALED(status))  // 信号退出 delete
+    	{
+    	    struct job_t* job = getjobpid(jobs, pid);
+            sigprocmask(SIG_BLOCK, &mask_all, &prev);
+            printf("Job [%d] (%d) terminated by signal %d\n", job->jid, job->pid, WTERMSIG(status));
             deletejob(jobs, pid);
-        }else if(WIFSIGNALED(status)){
-            if((detected = WTERMSIG(status)) == SIGINT)
-                deletejob(jobs, pid);
-            else    
-                printf("%d signal: %d\n", pid, detected);
+            sigprocmask(SIG_SETMASK, &prev, NULL);
+    	}
+    	else  // 停止 只修改状态就行
+    	{
+            struct job_t* job = getjobpid(jobs, pid);
+            sigprocmask(SIG_BLOCK, &mask_all, &prev);
+            printf("Job [%d] (%d) stopped by signal %d\n", job->jid, job->pid, WSTOPSIG(status));
+            job->state= ST;
+            sigprocmask(SIG_SETMASK, &prev, NULL);
         }
-    }else{
-        printf("No child reaped\n");
     }
+    errno = olderrno;  // 恢复
     return;
 }
 
@@ -372,18 +391,13 @@ void sigchld_handler(int sig)
  */
 void sigint_handler(int sig) 
 {
-    pid_t pid;
-    struct job_t* job;
-    pid = fgpid(jobs);
-    if(pid){
-        job = getjobpid(jobs, pid);
-        kill(-pid, SIGINT);
-        printf("Job [%d] (%d) terminated by signal %d\n", job -> jid, job -> pid, SIGINT);
-    }
-    //else{
-    //    printf("No fg\n");
-    //}
-    return;
+   	int olderrno = errno;
+   	pid_t pid = fgpid(jobs);
+   	if (pid != 0)
+            kill(-pid, sig);
+   	errno = olderrno;
+   	
+   	return;
 }
 
 /*
@@ -393,18 +407,11 @@ void sigint_handler(int sig)
  */
 void sigtstp_handler(int sig) 
 {
-    pid_t pid;
-    struct job_t *job;
-    pid = fgpid(jobs);
-    if(pid){
-        job = getjobpid(jobs, pid);
-        kill(-pid, SIGSTOP);
-        job -> state = ST; 
-        printf("Job [%d] (%d) stopped by signal %d\n", job -> jid, job -> pid, SIGSTOP);
-    }
-    //else{
-    //    printf("No fg\n");
-    //}
+    int olderrno = errno;
+    pid_t pid = fgpid(jobs);
+    if (pid != 0)
+    	kill(-pid, sig);
+    errno = olderrno;
     return;
 }
 
