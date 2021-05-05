@@ -194,8 +194,11 @@ void eval(char *cmdline)
             sigprocmask(SIG_SETMASK, &prev_mask, NULL);
             waitfg(pid);
         }else{
+            struct job_t *job;
             addjob(jobs, pid, BG, cmdline);
             sigprocmask(SIG_SETMASK, &prev_mask, NULL);
+            job = getjobpid(jobs, pid);
+            printf("[%d] (%d) %s\n", job->jid, job->pid, job->cmdline);
         }
     }
     return;
@@ -376,9 +379,10 @@ void sigint_handler(int sig)
         job = getjobpid(jobs, pid);
         kill(-pid, SIGINT);
         printf("Job [%d] (%d) terminated by signal %d\n", job -> jid, job -> pid, SIGINT);
-    }else{
-        printf("No fg\n");
     }
+    //else{
+    //    printf("No fg\n");
+    //}
     return;
 }
 
@@ -397,9 +401,10 @@ void sigtstp_handler(int sig)
         kill(-pid, SIGSTOP);
         job -> state = ST; 
         printf("Job [%d] (%d) stopped by signal %d\n", job -> jid, job -> pid, SIGSTOP);
-    }else{
-        printf("No fg\n");
     }
+    //else{
+    //    printf("No fg\n");
+    //}
     return;
 }
 
