@@ -166,9 +166,9 @@ void eval(char *cmdline)
 {
     char *argv[MAXARGS];
     char buf[MAXLINE];
-    int bg;
+    int bg, state;
     pid_t pid;
-    sigset_t mask, prev_mask;
+    sigset_t mask, prev_mask, all_mask;
 
     strcpy(buf, cmdline);
     bg = parseline(buf, argv);
@@ -177,26 +177,28 @@ void eval(char *cmdline)
 
     sigemptyset(&mask);
     sigaddset(&mask, SIGCHLD);
-    sigprocmask(SIG_BLOCK, &mask, &prev_mask);    
+    sigfillset(&all_mask)
     
     if(!builtin_cmd(argv)){
+        sigprocmask(SIG_BLOCK, &mask, &prev_mask);    
         if((pid = fork()) == 0){
             sigprocmask(SIG_SETMASK, &prev_mask, NULL);
             setpgid(0, 0);
             if(execve(argv[0], argv, environ) < 0) {
                 printf("%s: Command not found.\n", argv[0]);
+                exit(0);
             }
             sleep(1);
-            exit(0);
         }
+
+        state = bg? BG : FG;
+        sigprocmask(SIG_SETMASK, &all_mask, NULL);
+        addjob(jobs, pid, state, cmdline);
+        sigprocmask(SIG_SETMASK, &prev_mask, NULL);
         if(!bg){
-            addjob(jobs, pid, FG, cmdline);
-            sigprocmask(SIG_SETMASK, &prev_mask, NULL);
             waitfg(pid);
         }else{
             struct job_t *job;
-            addjob(jobs, pid, BG, cmdline);
-            sigprocmask(SIG_SETMASK, &prev_mask, NULL);
             job = getjobpid(jobs, pid);
             printf("[%d] (%d) %s\n", job->jid, job->pid, job->cmdline);
         }
@@ -289,36 +291,54 @@ int builtin_cmd(char **argv)
  */
 void do_bgfg(char **argv) 
 {
-    char *argv_one = argv[1];
-    int jid;
-    pid_t pid;
-    struct job_t *job = NULL;
-    if(argv_one[0] == '%'){
-        jid = atoi(&argv_one[1]);
-        job = getjobjid(jobs, jid);
-        if(job == NULL){
-            printf("%s: No such job\n", argv[1]);
-            return;
-        }
-    }
-    else{
-        pid = (pid_t)atoi(argv_one);
-        job = getjobpid(jobs, pid);
-        if(job == NULL){
-            printf("%s: No such process\n", argv[1]);
-            return;
-        }
-    }
-    pid = job -> pid;
+    struct job_t* job;
+    int id;
 
-    kill(-pid, SIGCONT);
-    if(!strcmp(argv[0], "fg")){
-        job -> state = FG;
-        waitfg(pid);
-    }else{
-        job -> state = BG;
-        printf("[%d] (%d) %s", job->jid, job -> pid, job->cmdline);
+    if (argv[1] == NULL)
+    {
+    	printf("%s command requires PID or %%jobid argument\n", argv[0]);
+    	return;
     }
+    
+
+    if (sscanf(argv[1], "%%%d", &id) > 0)
+    {
+    	job = getjobjid(jobs, id);
+    	if (job == NULL)
+    	{
+    		printf("%%%d: No such job\n", id);
+    		return ;
+    	}
+    }
+    // 读到pid
+    else if (sscanf(argv[1], "%d", &id) > 0)
+    {
+    	job = getjobpid(jobs, id);
+    	if (job == NULL)
+    	{
+    		printf("(%d): No such process\n", id);
+    		return ;
+    	}
+    }
+    else
+    {
+    	printf("%s: argument must be a PID or %%jobid\n", argv[0]);
+        return;
+    }
+    if(!strcmp(argv[0], "bg"))
+    {
+    	kill(-(job->pid), SIGCONT);
+    	job->state = BG;
+    	printf("[%d] (%d) %s",job->jid, job->pid, job->cmdline);
+    }
+    else
+    {
+    	kill(-(job->pid), SIGCONT);
+    	job->state = FG;
+    	waitfg(job->pid);
+    }
+    
+    
     return;
 }
 
