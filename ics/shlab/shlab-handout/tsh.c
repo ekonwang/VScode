@@ -289,24 +289,26 @@ void do_bgfg(char **argv)
     char *argv_one = argv[1];
     int jid;
     pid_t pid;
-    job_t *job = NULL;
+    struct job_t *job = NULL;
     if(argv_one[0] == '%'){
         jid = atoi(&argv_one[1]);
         job = getjobjid(jobs, jid);
         if(job == NULL){
-            printf("%s: No such job", argv[1]);
+            printf("%s: No such job\n", argv[1]);
+            return;
         }
     }
     else{
         pid = (pid_t)atoi(argv_one);
         job = getjobpid(jobs, pid);
         if(job == NULL){
-            printf("%s: No such process", argv[1]);
+            printf("%s: No such process\n", argv[1]);
+            return;
         }
     }
     pid = job -> pid;
 
-    if(job -> status == ST){
+    if(job -> state == ST){
         kill(-pid, SIGCONT);
     }
     if(!strcmp(argv[0], "fg")){
@@ -320,8 +322,8 @@ void do_bgfg(char **argv)
  */
 void waitfg(pid_t pid)
 {
-    job_t job;
-    while((job = getjobpid(pid)) && job -> status == FG){
+    struct job_t *job;
+    while((job = getjobpid(jobs, pid)) != NULL && job -> state == FG){
         sleep(1);
     }
     return;
@@ -340,10 +342,10 @@ void waitfg(pid_t pid)
  */
 void sigchld_handler(int sig) 
 {   
-    int *status;
+    int status;
     pid_t pid;
     int detected;
-    pid = waitpid(-1, status, 0);
+    pid = waitpid(-1, &status, 0);
     if(pid){
         if(WIFEXITED(status)){
             deletejob(jobs, pid);
@@ -364,12 +366,12 @@ void sigchld_handler(int sig)
 void sigint_handler(int sig) 
 {
     pid_t pid;
-    job_t job;
+    struct job_t* job;
     pid = fgpid(jobs);
     if(pid){
-        job = getjobpid(pid);
+        job = getjobpid(jobs, pid);
         kill(-pid, SIGINT);
-        printf("Job [%d] (%d) terminated by signal %d\n", jobs[i].jid, jobs[i].pid, SIGINT);
+        printf("Job [%d] (%d) terminated by signal %d\n", job -> jid, job -> pid, SIGINT);
     }
     return;
 }
@@ -382,13 +384,13 @@ void sigint_handler(int sig)
 void sigtstp_handler(int sig) 
 {
     pid_t pid;
-    job_t *job;
+    struct job_t *job;
     pid = fgpid(jobs);
     if(pid){
         job = getjobpid(jobs, pid);
         kill(-pid, SIGSTOP);
-        job -> state = ST;
-        printf("Job [%d] (%d) stopped by signal %d\n", jobs[i].jid, jobs[i].pid, SIGSTOP);
+        job -> state = ST; 
+        printf("Job [%d] (%d) stopped by signal %d\n", job -> jid, job -> pid, SIGSTOP);
     }
     return;
 }
