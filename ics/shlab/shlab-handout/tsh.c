@@ -294,15 +294,13 @@ void do_bgfg(char **argv)
     struct job_t* job;
     int id;
 
-    if (argv[1] == NULL)
-    {
+    if (argv[1] == NULL){
     	printf("%s command requires PID or %%jobid argument\n", argv[0]);
     	return;
     }
     
 
-    if (sscanf(argv[1], "%%%d", &id) > 0)
-    {
+    if (sscanf(argv[1], "%%%d", &id) > 0){
     	job = getjobjid(jobs, id);
     	if (job == NULL)
     	{
@@ -310,9 +308,7 @@ void do_bgfg(char **argv)
     		return ;
     	}
     }
-    // 读到pid
-    else if (sscanf(argv[1], "%d", &id) > 0)
-    {
+    else if (sscanf(argv[1], "%d", &id) > 0){
     	job = getjobpid(jobs, id);
     	if (job == NULL)
     	{
@@ -320,20 +316,16 @@ void do_bgfg(char **argv)
     		return ;
     	}
     }
-    else
-    {
+    else{
     	printf("%s: argument must be a PID or %%jobid\n", argv[0]);
         return;
     }
-    if(!strcmp(argv[0], "bg"))
-    {
-    	kill(-(job->pid), SIGCONT);
+    kill(-(job->pid), SIGCONT);
+    if(!strcmp(argv[0], "bg")){
     	job->state = BG;
     	printf("[%d] (%d) %s",job->jid, job->pid, job->cmdline);
     }
-    else
-    {
-    	kill(-(job->pid), SIGCONT);
+    else{
     	job->state = FG;
     	waitfg(job->pid);
     }
@@ -375,10 +367,7 @@ void sigchld_handler(int sig)
     sigfillset(&mask_all);  // 设置全阻塞
     while((pid = waitpid(-1, &status, WNOHANG | WUNTRACED)) > 0)
     {
-        // WNOHANG | WUNTRACED 是立即返回
-        // 用WIFEXITED(status)，WIFSIGNALED(status)，WIFSTOPPED(status)等来补获终止或者
-        // 被停止的子进程的退出状态。
-    	if (WIFEXITED(status))  // 正常退出 delete
+    	if (WIFEXITED(status))  
     	{
     		sigprocmask(SIG_BLOCK, &mask_all, &prev);
     		deletejob(jobs, pid);
