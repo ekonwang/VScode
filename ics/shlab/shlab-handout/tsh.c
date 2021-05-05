@@ -186,6 +186,7 @@ void eval(char *cmdline)
             if(execve(argv[0], argv, environ) < 0) {
                 printf("%s: Command not found.\n", argv[0]);
             }
+            sleep(1);
             exit(0);
         }
         if(!bg){
@@ -197,7 +198,6 @@ void eval(char *cmdline)
             sigprocmask(SIG_SETMASK, &prev_mask, NULL);
         }
     }
-
     return;
 }
 
@@ -312,6 +312,7 @@ void do_bgfg(char **argv)
         kill(-pid, SIGCONT);
     }
     if(!strcmp(argv[0], "fg")){
+        job -> state = FG;
         waitfg(pid);
     }
     return;
@@ -345,15 +346,18 @@ void sigchld_handler(int sig)
     int status;
     pid_t pid;
     int detected;
-    pid = waitpid(-1, &status, 0);
-    if(pid){
+    pid = waitpid(-1, &status, WNOHANG);
+    if(pid >= 0 && ( WIFEXITED(status) || WIFSIGNALED(status) )){
         if(WIFEXITED(status)){
             deletejob(jobs, pid);
-        }else if(WIFSIGNALED(status) && (detected = WTERMSIG(status)) == SIGINT){
-            deletejob(jobs, pid);
-        }else{
-            printf("%d signal: %d\n", pid, detected);
+        }else if(WIFSIGNALED(status)){
+            if((detected = WTERMSIG(status)) == SIGINT)
+                deletejob(jobs, pid);
+            else    
+                printf("%d signal: %d\n", pid, detected);
         }
+    }else{
+        printf("No child reaped\n");
     }
     return;
 }
@@ -372,6 +376,8 @@ void sigint_handler(int sig)
         job = getjobpid(jobs, pid);
         kill(-pid, SIGINT);
         printf("Job [%d] (%d) terminated by signal %d\n", job -> jid, job -> pid, SIGINT);
+    }else{
+        printf("No fg\n");
     }
     return;
 }
@@ -391,6 +397,8 @@ void sigtstp_handler(int sig)
         kill(-pid, SIGSTOP);
         job -> state = ST; 
         printf("Job [%d] (%d) stopped by signal %d\n", job -> jid, job -> pid, SIGSTOP);
+    }else{
+        printf("No fg\n");
     }
     return;
 }
