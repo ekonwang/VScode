@@ -311,12 +311,13 @@ void do_bgfg(char **argv)
     }
     pid = job -> pid;
 
-    if(job -> state == ST){
-        kill(-pid, SIGCONT);
-    }
+    kill(-pid, SIGCONT);
     if(!strcmp(argv[0], "fg")){
         job -> state = FG;
         waitfg(pid);
+    }else{
+        job -> state = BG;
+        printf("[%d] (%d) %s", job->jid, job -> pid, job->cmdline);
     }
     return;
 }
@@ -371,7 +372,7 @@ void sigchld_handler(int sig)
             deletejob(jobs, pid);
             sigprocmask(SIG_SETMASK, &prev, NULL);
     	}
-    	else  // 停止 只修改状态就行
+    	else  
     	{
             struct job_t* job = getjobpid(jobs, pid);
             sigprocmask(SIG_BLOCK, &mask_all, &prev);
