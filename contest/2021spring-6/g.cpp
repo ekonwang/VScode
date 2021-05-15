@@ -32,6 +32,7 @@ std::cout.tie(nullptr);                                                      //*
 
 // 样例不过：细节问题（边界的处理，变量的初始化等等）
 // 审题出现问题（以后审题至少审两遍，第二遍要纠正第一遍审题的理解偏差）
+// cnt的初始化一直理解有些问题
 
 const int N = 4e5 + 5;
 ll cnt[20][20], dp[1 << 20];
@@ -51,20 +52,15 @@ void solve() {
             ll count = 0;
             if(i == j) continue;
             if(g[i].empty() || g[j].empty()) continue;
-            for(pos1 = g[i].size()-1, pos2 = 0; g[i][pos1] > g[j][pos2] 
-                && pos1 >= 0 && pos2 < g[j].size(); ){
-                count++;
-                pos1--;
-                pos2++;
+            pos2 = 0;
+            for(pos1 = 0; pos1 < g[i].size(); pos1++){
+                while(pos2 < g[j].size()-1 && g[j][pos2+1] < g[i][pos1])
+                    pos2 ++;
+                if(g[i][pos1] > g[j][pos2])
+                    count += pos2 + 1;
             }
             cnt[i][j] = count;
         }
-    }
-
-    FOR(i, 0, 19){
-        FOR(j, 0, 19){
-            cout << cnt[i][j] << ' ';
-        }cout << endl;
     }
     memset(dp, 0x7f, sizeof(dp));
     dp[0] = 0;
