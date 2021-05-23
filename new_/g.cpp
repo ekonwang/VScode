@@ -30,37 +30,35 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
-int a, b, c, r, t, tmp;
-#define DEB
-int overlap(){
-    if(b <= c-r || a >= c+r) 
-        return 0;
-    else if(a >= c-r && b <= c+r) 
-        return b-a;
-    else if(a <= c-r && b >= c+r)
-        return r+r;
-    else if(a < c-r)
-        return b - (c-r);
-    else    
-        return (c+r) - a;
-    
-}
+const int N = 3e5 + 5;
+int a[N], l[N], r[N], t, n;
 
 void solve() {
     cin >> t;
     while(t--){
-        cin >> a >> b >> c >> r;
-        if(a > b){
-            tmp = a;
-            a = b;
-            b = tmp;
+        memset(l, 0, sizeof(int) * (n+1));
+        memset(r, 0, sizeof(int) * (n+1));
+        cin >> n;
+        int leftmost = 0, rmost = n+1;
+        FOR(i, 1, n) cin >> a[i];
+        FOR(i, 1, n){
+            if(a[i] >= (i-1)) l[i] = 1;
+            if(a[i] >= (n-i)) r[i] = 1;
         }
-        #ifdef DEBUG
-            cout << overlap() << endl;
-        #endif
-        cout << b-a-overlap() << endl;
+        while(l[leftmost+1]){
+            leftmost++;
+            if(leftmost >= n) break;
+        }
+        while(r[rmost-1]){
+            rmost--;
+            if(rmost <= 1) break;
+        }
+        if(leftmost >= rmost) {
+            cout << "Yes" << endl;
+        }
+        else cout << "No" << endl;
     }
+
 }
 
 int main() {

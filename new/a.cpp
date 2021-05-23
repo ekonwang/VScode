@@ -31,23 +31,22 @@ std::cout.tie(nullptr);                                                      //*
 //---------------------------------------------------------------------------//*
 
 const int N = 100000 + 5;
-int t, n, a[N], zeros, sum;
+string s;
+int t, n;
 
 void solve() {
     cin >> t;
     while(t--){
-        int res = 0;
-        zeros = 0;
-        sum = 0;
-        cin >> n;
-        FOR(i, 1, n) cin >> a[i];
-        FOR(i, 1, n) {
-            zeros += (a[i] ? 0 : 1);
-            sum += a[i];
+        cin >> s;
+        n = s.size();
+        if(s.substr(n-2, 2) == "po"){
+            cout << "FILIPINO" << endl;
         }
-        res += zeros;
-        if(sum == -zeros) res += 1;
-        cout << res << endl;
+        else if(s.substr(n-4, 4) == "desu" || s.substr(n-4, 4) == "masu"){
+            cout << "JAPANESE" << endl;
+        }else{
+            cout << "KOREAN" << endl;
+        }
     }
 }
 

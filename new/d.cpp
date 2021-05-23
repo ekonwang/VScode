@@ -30,37 +30,77 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
-int a, b, c, r, t, tmp;
-#define DEB
-int overlap(){
-    if(b <= c-r || a >= c+r) 
-        return 0;
-    else if(a >= c-r && b <= c+r) 
-        return b-a;
-    else if(a <= c-r && b >= c+r)
-        return r+r;
-    else if(a < c-r)
-        return b - (c-r);
-    else    
-        return (c+r) - a;
-    
-}
+const int N = 100;
+int a[N][N], t, r, c;
+string s;
 
 void solve() {
     cin >> t;
     while(t--){
-        cin >> a >> b >> c >> r;
-        if(a > b){
-            tmp = a;
-            a = b;
-            b = tmp;
+        int edgeline = 0, line = 0, corner = 0, edge = 0, counts = 0, res = -1;
+        cin >> r >> c;
+        FORN(i, r){
+            cin >> s;
+            FORN(j, c){
+                if(s[j] == 'A'){
+                    a[i+1][j+1] = 1;
+                }else{
+                    a[i+1][j+1] = 0;
+                }
+            }
         }
-        #ifdef DEBUG
-            cout << overlap() << endl;
-        #endif
-        cout << b-a-overlap() << endl;
+        /* line in r */
+        FOR(i, 1, r){
+            int tp = 0;
+            FOR(j, 1, c){
+                tp += a[i][j];
+                counts += a[i][j];
+            }
+            if(tp == c){
+                if(i == 1 || i == r){
+                    edgeline = 1;
+                }
+                line = 1;
+            }
+            if(tp && (i == 1 || i == r))
+                edge = 1;
+        }
+        /* line in c */
+        FOR(j, 1, c){
+            int tp = 0;
+            FOR(i, 1, r){
+                tp += a[i][j];
+            }
+            if(tp == r){
+                if(j == 1 || j == c){
+                    edgeline = 1;
+                }
+                line = 1;
+            }
+            if(tp && (j == 1 || j == c))
+                edge = 1;
+        }
+        /* corner */
+        corner = a[1][1] | a[r][1] | a[r][c] | a[1][c];
+
+        if(counts == 0)
+            res = -1;
+        else if(counts == r*c)
+            res = 0;
+        else if(edgeline)
+            res = 1;
+        else if(line || corner)
+            res = 2;
+        else if(edge)
+            res = 3;
+        else 
+            res = 4;
+        if(res >= 0) 
+            cout << res << endl;
+        else 
+            cout << "MORTAL" << endl;
     }
+
 }
 
 int main() {

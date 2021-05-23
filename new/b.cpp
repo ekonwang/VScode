@@ -30,17 +30,76 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 2e5 + 5;
-int n, a[N], t; 
+const int N = 100000 + 5;
+int t;
+#define DEBU
+bool lexi_cmp(string s1, string s2){
+    int len1 = s1.length(), len2 = s2.length(), lens = min(len1, len2), dif = -1;
+    for(int i = 0; i < lens; i++){
+        if(s1[i] != s2[i]) {
+            dif = i;
+            break;
+        }
+    }
+    if(dif == -1) {
+        if(len1 < len2) return true;
+        else return false;
+    }
+    #ifdef DEBUG
+        cout << '\t' << s1[dif] << ' ' << s2[dif] << endl; 
+    #endif
+    return s1[dif] < s2[dif];
+}
 
+string sort_str(string s){
+    string ret = s;
+    int len = s.length();
+    int a[N], b[N], dif = -1, found = -1;
+    for(int i = 0; i < len; i++){
+        a[i] = s[i] - 'A';
+        b[i] = a[i];
+    }
+    sort(a, a+len);
+    #ifdef DEBUG
+        for(int i = 0; i < len; i++) cout << a[i] << ' '; cout << endl;
+        for(int i = 0; i < len; i++) cout << b[i] << ' '; cout << endl;
+    #endif
+    for(int i = 0; i < len; i++){
+        if(a[i] != b[i]){
+            dif = i;
+            break;
+        }
+    }
+    if(dif < 0){
+        return s;
+    }
+    for(int i = len-1; i >= 0; i--){
+        if(b[i] == a[dif]){
+            found = i;
+            break;
+        }
+    }
+    #ifdef DEBUG
+        cout << '\t' << ret << endl;
+    #endif
+    ret[dif] = s[found];
+    ret[found] = s[dif];
+    return ret;
+}
 void solve() {
     cin >> t;
+    string s1, s2;
     while(t--){
-        cin >> n;
-        int y = 2*n;
-        FOR(i, 1, y) cin >> a[i];
-        sort(a + 1, a + y + 1);
-        cout << abs(a[n+1]-a[n]) << endl;
+        cin >> s1 >> s2;
+        s1 = sort_str(s1);
+        if(lexi_cmp(s1, s2)){
+            cout << s1 << endl;
+            continue;
+        }
+        cout << "---" << endl;
+        #ifdef DEBUG
+            cout << '\t' << s1 << endl;
+        #endif
     }
 }
 

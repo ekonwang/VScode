@@ -30,36 +30,30 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
-int a, b, c, r, t, tmp;
-#define DEB
-int overlap(){
-    if(b <= c-r || a >= c+r) 
-        return 0;
-    else if(a >= c-r && b <= c+r) 
-        return b-a;
-    else if(a <= c-r && b >= c+r)
-        return r+r;
-    else if(a < c-r)
-        return b - (c-r);
-    else    
-        return (c+r) - a;
-    
+const int N = 2e5 + 5;
+ll a[N], n, p, k, t;
+
+ll buy_start(ll *b, ll n, ll p){
+    ll sum = 0, i = -1;
+    while(i+2 < n){                 
+        if(sum + b[i+2] <= p){
+            sum += b[i+2];
+            i += 2;
+        }else{
+            break;
+        }
+    }
+    return i+1;
 }
 
-void solve() {
+void solve() {  
     cin >> t;
     while(t--){
-        cin >> a >> b >> c >> r;
-        if(a > b){
-            tmp = a;
-            a = b;
-            b = tmp;
-        }
-        #ifdef DEBUG
-            cout << overlap() << endl;
-        #endif
-        cout << b-a-overlap() << endl;
+        cin >> n >> p >> k;
+        FORN(i, n) cin >> a[i];
+        sort(a, a+n);
+        ll res = max(buy_start(&a[0], n, p), buy_start(&a[1], n-1, p-a[0]) + (p >= a[0] ? 1:0));
+        cout << res << endl;
     }
 }
 

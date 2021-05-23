@@ -30,36 +30,17 @@ std::cout.tie(nullptr);                                                      //*
 }                                                                            //*
 //---------------------------------------------------------------------------//*
 
-const int N = 100000 + 5;
-int a, b, c, r, t, tmp;
-#define DEB
-int overlap(){
-    if(b <= c-r || a >= c+r) 
-        return 0;
-    else if(a >= c-r && b <= c+r) 
-        return b-a;
-    else if(a <= c-r && b >= c+r)
-        return r+r;
-    else if(a < c-r)
-        return b - (c-r);
-    else    
-        return (c+r) - a;
-    
-}
+const int N = 2e5 + 5;
+int n, a[N], t; 
 
 void solve() {
     cin >> t;
     while(t--){
-        cin >> a >> b >> c >> r;
-        if(a > b){
-            tmp = a;
-            a = b;
-            b = tmp;
-        }
-        #ifdef DEBUG
-            cout << overlap() << endl;
-        #endif
-        cout << b-a-overlap() << endl;
+        cin >> n;
+        int y = 2*n;
+        FOR(i, 1, y) cin >> a[i];
+        sort(a + 1, a + y + 1);
+        cout << abs(a[n+1]-a[n]) << endl;
     }
 }
 
